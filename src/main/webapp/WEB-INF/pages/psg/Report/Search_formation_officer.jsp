@@ -1,0 +1,690 @@
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<script type="text/javascript" src="js/AES_ENC_DEC/lib/aes.js"></script>
+<script type="text/javascript" src="js/AES_ENC_DEC/lib/pbkdf2.js"></script>
+<script type="text/javascript" src="js/AES_ENC_DEC/AesUtil.js"></script> 
+<script src="js/JS_CSS/jquery-1.10.2.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="js/miso/autoComplate/autoComplate.css">
+
+<link rel="stylesheet" href="js/InfiniteScroll/css/datatables.min.css">
+<script type="text/javascript" src="js/InfiniteScroll/js/datatables.min.js"></script>
+<script type="text/javascript" src="js/InfiniteScroll/js/jquery.mockjax.min.js"></script>
+<script type="text/javascript" src="js/InfiniteScroll/js/datatables.mockjax.js"></script>
+
+<link href="js/Calender/jquery-ui.css" rel="Stylesheet"></link>
+<script src="js/Calender/jquery-ui.js" type="text/javascript"></script>
+<script src="js/miso/commonJS/commonmethod.js" type="text/javascript"></script>
+
+
+<form:form name="Actual_str_of_user" id="Actual_str_of_user"
+	action="assests_Serviceablity_detailsAction" method="post"
+	class="form-horizontal" commandName="">
+	<div class="animated fadeIn">
+		<div class="col-md-12" align="center">
+			<div class="card">
+				<div class="card-header">
+					<h5>Search:BC/PC</h5>
+					
+				</div>
+				<div class="card-body card-block">
+						          			<div class="col-md-12">
+								<div class="col-md-6">
+									<div class="row form-group">
+								    	<div class="col col-md-4">
+								        	<label class=" form-control-label">Cont Comd </label>
+								       	</div>
+								        <div class="col-12 col-md-8">
+								        	<select id="cont_comd" name="cont_comd" class="form-control" >
+								            	${selectcomd}
+									            <c:forEach var="item" items="${getCommandList}" varStatus="num" >
+									            	<option value="${item[0]}"  name="${item[1]}" >${item[1]}</option>
+	                  							</c:forEach>
+	                  						</select>
+								    	</div>
+								  	</div>
+								</div>
+								<div class="col-md-6">
+									<div class="row form-group">
+			                			<div class="col col-md-4">
+			                  				<label class="form-control-label">Cont Corps</label>
+			               				</div>
+			                			<div class="col-12 col-md-8">
+			                 				<select id="cont_corps" name="cont_corps" class="form-control" >
+			                 					${selectcorps}
+			                 					<c:forEach var="item" items="${getCorpsList}" varStatus="num" >
+	                  								<option value="${item[0]}"  name="${item[1]}" >${item[1]}</option>
+	                  							</c:forEach>
+			                 				</select>
+			                			</div>
+					              	</div>
+								</div>
+							</div>
+	          				<div class="col-md-12">
+								<div class="col-md-6">
+									<div class="row form-group">
+						                <div class="col col-md-4">
+						                  <label class=" form-control-label">Cont Div</label>
+						                </div>
+						                <div class="col-12 col-md-8">
+						                 	<select id="cont_div" name="cont_div" class="form-control" >
+						                 		${selectDiv}
+						                 		<c:forEach var="item" items="${getDivList}" varStatus="num" >
+	                  								<option value="${item[0]}"  name="${item[1]}" >${item[1]}</option>
+	                  							</c:forEach>
+						                 	</select>
+						                </div>
+						            </div>
+								</div>
+								<div class="col-md-6">
+									<div class="row form-group">
+		                				<div class="col col-md-4">
+		                  					<label class=" form-control-label">Cont Bde</label>
+		                				</div>
+		                				<div class="col-12 col-md-8">
+		                 					<select id="cont_bde" name="cont_bde" class="form-control" >
+		                 						${selectBde}
+		                 						<c:forEach var="item" items="${getBdeList}" varStatus="num" >
+	                  								<option value="${item[0]}"  name="${item[1]}" >${item[1]}</option>
+	                  							</c:forEach>
+		                 					</select>
+		                				</div>
+					            	</div>
+								</div>
+							</div>
+							<div class="col-md-12">
+		          				<div class="col-md-6">
+		          					<div class="row form-group">
+										<div class="col col-md-4">
+											<label class=" form-control-label">Unit Name </label>
+										</div>
+										<div class="col-12 col-md-8">			
+											<input type="text" id="unit_name" name="unit_name" maxlength="100" placeholder="Search Unit Name" class="form-control autocomplete" >
+										</div>
+									</div>
+		          				</div>
+		          				<div class="col-md-6">
+		          					<div class="row form-group">
+	                					<div class="col col-md-4">
+	                  						<label class=" form-control-label">SUS No</label>
+							            </div>
+							            <div class="col-12 col-md-8">
+											<input type="text" id="sus_no" name="sus_no" maxlength="8" placeholder="Search SUS No" class="form-control autocomplete" >
+										</div>
+	              					</div>
+		          				</div>
+		          			</div>
+				
+                      <div class="col-md-12">	              					
+	              				<div class="col-md-6">
+	              					<div class="row form-group">
+						               <div class="col-md-4">
+						                    <label class=" form-control-label"> Personal No </label>
+						                </div>
+						                <div class="col-md-8">
+						                   <input type="text" id="personnel_no" name="personnel_no" class="form-control autocomplete" autocomplete="off" maxlength="9" onkeyup="return specialcharecter(this)" onkeypress="return AvoidSpace(event)" > 
+						                </div>
+						            </div>
+	              				</div>
+	             				<div class="col-md-6">
+	              					<div class="row form-group">
+						               <div class="col-md-4">
+						                    <label class=" form-control-label"> Rank</label>
+						                </div>
+						                <div class="col-md-8">
+						                   <select name="rank" id="rank" class="form-control-sm form-control"   >
+												<option value="0">--Select--</option>
+												<c:forEach var="item" items="${getTypeofRankList}" varStatus="num">
+												<option value="${item[0]}" name="${item[1]}">${item[1]}</option>
+												</c:forEach>
+											</select>
+						                </div>
+						            </div>
+	              				</div>              				
+	              			</div>
+	              						<!-- <div class="col-md-12">	              					
+	              				<div class="col-md-6">
+	              					<div class="row form-group">
+						               <div class="col-md-4">
+						                    <label class=" form-control-label"><strong style="color: red;">* </strong> Status </label>
+						                </div>						               
+						                <div class="col-md-8">				           
+												
+											<select name="status" id="status" class="form-control-sm form-control"  >
+													<option value="0">Pending</option>
+												    <option value="1">Approved</option>	
+													 <option value="3">Rejected</option>
+											</select>
+										</div>
+						            </div>
+	              				</div>	             					              				
+	              			</div> -->
+				</div>
+
+				<div class="card-footer" align="center" class="form-control">
+					<a href="SearchFormationOfficer_url"
+						class="btn btn-success btn-sm">Clear</a> 
+						<i class="fa fa-search"></i><input type="button" class="btn btn-primary btn-sm"  id="btn-reload"  value="Search" />
+					   <!--  <input type="button" class="btn btn-primary btn-sm" value="Print" onclick="downloaddata()"> -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="viewpage" class=col-md-12>
+		<div class="col-md-12" id="getSearch_Letter" style="display: block;">
+			<div class="watermarked" data-watermark="" id="divwatermark">
+				<span id="ip"></span>
+				<table id="getSearch_formation_wise"
+					class="table no-margin table-striped  table-hover  table-bordered report_print_scroll">
+					<thead>
+						<tr>
+							<th >Personal No</th>
+							<th >Rank</th>
+							<!-- <th id ="7">Authority</th>
+							<th id ="8">Date Of Authority</th> -->
+							<th >Name</th>
+							<th >Unit Name</th>
+							<th >Date Of Casualty</th>
+							 <th >Recommended By Unit</th> 
+							<th >Approved By MP5(d)</th> 
+							<th>Action</th> 
+							
+							<c:if test="${roleType == 'APP'}">
+								<th>Select To Approve</th>
+							</c:if>
+
+						</tr>
+					</thead>
+
+				</table>
+			</div>
+		</div>
+	</div>
+
+
+</form:form>
+
+
+
+
+
+
+
+<c:url value="Searchformationbattle" var="Searchformationbattle" />
+	<form:form action="${Searchformationbattle}" method="post" id="searchForm" name="searchForm" modelAttribute="id7">
+		<input type="hidden" name="personnel_no1" id="personnel_no1" />				
+		<input type="hidden" name="rank1" id="rank1" />		
+		
+		
+	</form:form> 
+<c:url value="Download_BattleCA" var="dwonloadUrl"/>
+<form:form action="${dwonloadUrl}" method="post" id="downloadForm" name="downloadForm" modelAttribute="personnel_no_d">
+	   <input type="hidden" name="personnel_no_d" id="personnel_no_d"  value="0">
+</form:form>
+
+<script type="text/javascript">
+function data(getSearch_formation_wise){
+	jsondata = [];
+
+	var table = $('#'+getSearch_formation_wise).DataTable();
+	var info = table.page.info();
+	var currentPage = info.page;
+	var pageLength = info.length;
+	var startPage = info.start;
+	var endPage = info.end;
+	var Search = table.search();
+	var order = table.order();
+	var orderColunm = $(table.column(order[0][0]).header()).attr('id');
+	var orderType = order[0][1];
+	
+	var cont_comd=$("#cont_comd").val();
+ 	var cont_corps=$("#cont_corps").val();
+ 	var cont_div=$("#cont_div").val();
+ 	var cont_bde=$("#cont_bde").val();
+ 	var unit_name=$("#unit_name").val();
+ 	var sus_no=$("#sus_no").val();
+	var personnel_no=$("#personnel_no").val() ;
+	var rank=$("#rank").val() ;
+	
+	
+
+
+	
+	var s_total = 0;
+	$.post("getbattlecassformationCount?"+key+"="+value,{Search:Search,cont_comd:cont_comd,cont_corps:cont_corps,cont_div:cont_div,cont_bde:cont_bde,unit_name:unit_name,sus_no:sus_no,personnel_no:personnel_no,
+		rank:rank,
+		},function(j) {
+		FilteredRecords = j;
+		s_total = j;
+	});
+	
+	$.post("getbattlecassformation?"+key+"="+value,{startPage:startPage,pageLength:pageLength,Search:Search,orderColunm:orderColunm,orderType:orderType,cont_comd:cont_comd,cont_corps:cont_corps,cont_div:cont_div,cont_bde:cont_bde,unit_name:unit_name,sus_no:sus_no,personnel_no:personnel_no,
+		rank:rank,
+		},function(j) {
+			
+		for (var i = 0; i < j.length; i++) {
+			
+			jsondata.push([j[i].personnel_no,j[i].rank,j[i].name,j[i].unit_name,j[i].date_of_casuality,j[i].classification_of_casuality,j[i].status_by_mp,j[i].action,
+			]);
+			
+			//s_total += j[i].total;
+			
+		}
+		jsondata.push([
+			"","","","","","","Count Of Personnel No",
+			s_total]);
+	});
+	
+}
+</script>
+
+
+
+<Script>
+	$(document).ready(function() {
+		
+		if('${roleAccess}' == 'Unit')
+		{
+			$("#cont_comd").attr("disabled", true);
+			$("#cont_corps").attr("disabled", true); 
+			$("#cont_div").attr("disabled", true); 
+			$("#cont_bde").attr("disabled", true);
+			$("#sus_no").attr("disabled", true); 
+			$("#unit_name").attr("disabled", true);
+			
+			$("#sus_no").val('${sus_no}');
+			$("#unit_name").val('${unit_name}');
+		}
+		if('${roleSubAccess}' == 'Brigade')
+		{
+			$("#cont_comd").attr("disabled", true);
+			$("#cont_corps").attr("disabled", true); 
+			$("#cont_div").attr("disabled", true); 
+			$("#cont_bde").attr("disabled", true);
+		}
+		if('${roleSubAccess}' == 'Division')
+		{
+			$("#cont_comd").attr("disabled", true);
+			$("#cont_corps").attr("disabled", true); 
+			$("#cont_div").attr("disabled", true); 
+			if('${cont_div1}' != ""){
+	   	    	getCONTBde('${cont_div1}');
+	   	    }
+		}
+		if('${roleSubAccess}' == 'Corps')
+		{
+			$("#cont_comd").attr("disabled", true);
+			$("#cont_corps").attr("disabled", true);
+			if('${cont_corps1}' != ""){
+	   		 	getCONTDiv('${cont_corps1}');
+	       	}
+	   	    if('${cont_div1}' != ""){
+	   	    	getCONTBde('${cont_div1}');
+	   	    }
+		}
+		if('${roleSubAccess}' == 'Command')
+		{
+			$("#cont_comd").attr("disabled", true);
+			if('${cont_comd1}' != ""){
+		    	$("#cont_comd").val('${cont_comd1}');
+		    	getCONTCorps('${cont_comd1}');
+	    	}
+	    	if('${cont_corps1}' != ""){
+	    		 getCONTDiv('${cont_corps1}');
+	    	}
+		    if('${cont_div1}' != ""){
+		    	getCONTBde('${cont_div1}');
+		    }
+		}
+		
+		if('${roleAccess}' == 'MISO' || '${roleAccess}' == 'HeadQuarter' || '${roleAccess}' == 'Line_dte')
+		{
+			if('${cont_comd1}' != ""){
+		    	$("#cont_comd").val('${cont_comd1}');
+		    	getCONTCorps('${cont_comd1}');
+	    	}
+	    	if('${cont_corps1}' != ""){
+	    		 getCONTDiv('${cont_corps1}');
+	    	}
+		    if('${cont_div1}' != ""){
+		    	getCONTBde('${cont_div1}');
+		    }
+		}
+		
+		var select = '<option value="' + "0" + '">'+ "--Select--" + '</option>';
+	   	$('select#cont_comd').change(function() {
+		   		var fcode = this.value;
+		   		if(fcode == "0"){
+		   			$("select#cont_corps").html(select);
+		   			$("select#cont_div").html(select);
+		   			$("select#cont_bde").html(select);
+	   		}else{	
+	   			$("select#cont_corps").html(select);
+		   			$("select#cont_div").html(select);
+		   			$("select#cont_bde").html(select);
+		   			
+		   			getCONTCorps(fcode);
+		    	
+		       		fcode += "00";	
+		   			getCONTDiv(fcode);
+		       	
+		       		fcode += "000";	
+		   			getCONTBde(fcode);
+	   		}
+		   	});
+		   	$('select#cont_corps').change(function() {
+		   	   	var fcode = this.value;
+	   	   	if(fcode == "0"){
+	   	   		$("select#cont_div").html(select);
+	   	   		$("select#cont_bde").html(select);
+		   	}else{
+		   		$("select#cont_div").html(select);
+	   	   		$("select#cont_bde").html(select);
+		   	   		getCONTDiv(fcode);
+		       		fcode += "000";	
+		   			getCONTBde(fcode);
+		   	}
+		   	});
+		   	$('select#cont_div').change(function() {
+		   		var fcode = this.value;    	   	
+		   		if(fcode == "0"){
+		 		$("select#cont_bde").html(select)
+		   	}else{
+		   		$("select#cont_bde").html(select)
+			   		getCONTBde(fcode);
+		   	}
+			});
+
+		
+		mockjax1('getSearch_formation_wise');
+		table = dataTable('getSearch_formation_wise');
+		$('#btn-reload').on('click', function(){
+	    	table.ajax.reload();
+	    });
+		
+		
+
+		
+		
+		
+		
+		
+		
+		
+		if ('${personnel_no1}' != "0" && '${personnel_no1}' != "") {
+			$("#personnel_no").val('${personnel_no1}');
+		}
+		if ('${rank1}' != "0" && '${rank1}' != "") {
+			$("#rank").val('${rank1}');
+		}
+		
+		
+		
+		
+
+		//unservisable();
+	});
+	
+	function getCONTCorps(fcode){
+	 	var fcode1 = fcode[0];
+			$.post("getCorpsDetailsList?"+key+"="+value,{fcode:fcode1}, function(j) {
+				if(j != ""){
+					var length = j.length-1;
+					var enc = j[length][0].substring(0,16);
+					var options = '<option value="' + "0" + '">'+ "--Select--" + '</option>';
+					
+					for ( var i = 0; i < length; i++) {
+						if('${cont_corps1}' ==  dec(enc,j[i][0])){
+							options += '<option value="' + dec(enc,j[i][0]) +'" name="'+dec(enc,j[i][1])+'" selected=selected >'+ dec(enc,j[i][1]) + '</option>';
+						}else{
+							options += '<option value="' + dec(enc,j[i][0]) +'" >'+ dec(enc,j[i][1]) + '</option>';
+						}
+					}	
+					$("select#cont_corps").html(options);
+				}
+			});
+	 } 
+	 function getCONTDiv(fcode){
+	 	var fcode1 = fcode[0] + fcode[1] + fcode[2];
+		   	$.post("getDivDetailsList?"+key+"="+value,{fcode:fcode1}, function(j) {
+		   		if(j != ""){
+	 		   	var length = j.length-1;
+				var enc = j[length][0].substring(0,16);
+				var options = '<option value="' + "0" + '">'+ "--Select--" + '</option>';
+				for ( var i = 0; i < length; i++) {
+					if('${cont_div1}' ==  dec(enc,j[i][0])){
+						options += '<option value="' + dec(enc,j[i][0]) +'" name="'+dec(enc,j[i][1])+'" selected=selected >'+ dec(enc,j[i][1]) + '</option>';
+					}else{
+						options += '<option value="' + dec(enc,j[i][0]) +'" >'+ dec(enc,j[i][1]) + '</option>';
+					}
+				}
+			   		$("select#cont_div").html(options);
+		   		}
+			});
+	 } 
+		function getCONTBde(fcode){
+			var fcode1 = fcode[0] + fcode[1] + fcode[2] + fcode[3] + fcode[4] + fcode[5];
+			$.post("getBdeDetailsList?"+key+"="+value,{fcode:fcode1}, function(j) {
+				if(j != ""){
+					var length = j.length-1;
+				var enc = j[length][0].substring(0,16);
+				var options = '<option value="' + "0" + '">'+ "--Select--" + '</option>';
+				jQuery("select#cont_bde").html(options);
+				for ( var i = 0; i < length; i++) {
+					if('${cont_bde1}' ==  dec(enc,j[i][0])){
+						options += '<option value="' +  dec(enc,j[i][0])+ '" name="'+dec(enc,j[i][1])+'" selected=selected>'+  dec(enc,j[i][1]) + '</option>';
+						$("#cont_bname").val(dec(enc,j[i][1]));
+					}else{
+						options += '<option value="' +  dec(enc,j[i][0]) +'" name="'+dec(enc,j[i][1])+'">'+ dec(enc,j[i][1]) + '</option>';
+					}
+				}	
+				$("select#cont_bde").html(options);
+				}
+		});
+	}
+	
+	
+	
+	
+	
+	function Search() {
+		$("#personnel_no1").val($("#personnel_no").val()) ;	
+	
+
+		$("#rank1").val($("#rank").val()) ;	
+		
+		document.getElementById('searchForm').submit();
+	}
+
+	 function fn_B_Head() {
+			
+			
+			var b_head = $("select#b_head").val();
+			$.post("getBudgetCodeList?" + key + "=" + value, {
+				b_head: b_head
+			}).done(function(j) {
+				var options = '<option   value="0">' + "--Select--" + '</option>';
+				for(var i = 0; i < j.length; i++) {
+					options += '<option   value="' + j[i][0] + '" name="' + j[i][1] + '" >' + j[i][1] + '</option>';
+				}
+				$("select#b_code").html(options);
+			}).fail(function(xhr, textStatus, errorThrown) {});
+		}
+	 
+	 function fn_makeName() {
+			
+		 var options = '<option   value="0">' + "--Select--" + '</option>';
+			var assets_name = $("select#asset_type").val();
+			$.post("getCategoryList?" + key + "=" + value, {
+				categogry_id: assets_name
+			}).done(function(j) {
+				
+				for(var i = 0; i < j.length; i++) {
+					options += '<option   value="' + j[i][0] + '" name="' + j[i][1] + '" >' + j[i][1] + '</option>';
+				}
+				
+			}).fail(function(xhr, textStatus, errorThrown) {});
+			$("select#a_type").html(options);
+		}
+
+
+	
+</script>
+
+<script>
+
+
+	$("#sus_no").keyup(function(){
+		var sus_no = this.value;
+		var susNoAuto=$("#sus_no");
+		 susNoAuto.autocomplete({
+		      source: function( request, response ) {
+		        $.ajax({
+		        type: 'POST',
+		        url: "getTargetSUSNoList?"+key+"="+value,
+		        data: {sus_no:sus_no},
+		          success: function( data ) {
+		        	  var susval = [];
+	                  var length = data.length-1;
+	                  var enc = data[length].substring(0,16);
+	                        for(var i = 0;i<data.length;i++){
+	                                susval.push(dec(enc,data[i]));
+	                        }
+	                        var dataCountry1 = susval.join("|");
+	                        var myResponse = []; 
+					        var autoTextVal=susNoAuto.val();
+					$.each(dataCountry1.toString().split("|"), function(i,e){
+						var newE = e.substring(0, autoTextVal.length);
+						if (e.toLowerCase().includes(autoTextVal.toLowerCase())) {
+						  myResponse.push(e);
+						}
+					});      	          
+					response( myResponse ); 
+		          }
+		        });
+		      },
+			  minLength: 1,
+		      autoFill: true,
+		      change: function(event, ui) {
+		    	 if (ui.item) {   	        	  
+		        	  return true;    	            
+		          } else {
+		        	  alert("Please Enter Approved Unit SUS No.");
+		        	  document.getElementById("sus_no").value="";
+		        	  susNoAuto.val("");	        	  
+		        	  susNoAuto.focus();
+		        	  return false;	             
+		          }   	         
+		    }, 
+			select: function( event, ui ) {
+				var sus_no = ui.item.value;			      	
+				 $.post("getTargetUnitNameList?"+key+"="+value, {
+					 sus_no:sus_no
+	         }, function(j) {	                
+	         }).done(function(j) {
+	        	 var length = j.length-1;
+	             var enc = j[length].substring(0,16);
+	             $("#unit_name").val(dec(enc,j[0]));                    
+	         }).fail(function(xhr, textStatus, errorThrown) {
+	         });
+			} 	     
+		});	
+	});
+	
+	
+	 $("input#unit_name").keypress(function(){
+			var unit_name = this.value;
+			var susNoAuto=$("#unit_name");
+				  susNoAuto.autocomplete({
+				      source: function( request, response ) {
+				        $.ajax({
+				        	type: 'POST',
+					    	url: "getTargetUnitsNameActiveList?"+key+"="+value,
+				        data: {unit_name:unit_name},
+				          success: function( data ) {
+				        	 var susval = [];
+				        	  var length = data.length-1;
+				        	  var enc = data[length].substring(0,16);
+					        	for(var i = 0;i<data.length;i++){
+					        		susval.push(dec(enc,data[i]));
+					        	}					        	   	          
+							response( susval ); 
+				          }
+				        });
+				      },
+				      minLength: 1,
+				      autoFill: true,
+				      change: function(event, ui) {
+				    	 if (ui.item) {   	        	  
+				        	  return true;    	            
+				          } else {
+				        	  alert("Please Enter Approved Unit Name.");
+				        	  document.getElementById("unit_name").value="";
+				        	  susNoAuto.val("");	        	  
+				        	  susNoAuto.focus();
+				        	  return false;	             
+				          }   	         
+				      }, 
+				      select: function( event, ui ) {
+				    	 var unit_name = ui.item.value;			    
+				            $.post("getTargetSUSFromUNITNAME?"+key+"="+value,{target_unit_name:unit_name}, function(data) {
+				            }).done(function(data) {
+				            	var length = data.length-1;
+					        	var enc = data[length].substring(0,16);
+					        	$("#sus_no").val(dec(enc,data[0]));
+				            }).fail(function(xhr, textStatus, errorThrown) {
+				            });
+				      } 	     
+				}); 			
+		});
+	
+	 $("input#personnel_no").keypress(function(){
+			
+			var personel_no = this.value;
+				 var susNoAuto=$("#personnel_no");
+				  susNoAuto.autocomplete({
+				      source: function( request, response ) {
+				        $.ajax({
+				        	type: 'POST',
+					    	url: "getpersonnel_no?"+key+"="+value,
+				        data: {personel_no:personel_no},
+				          success: function( data ) {
+				        	 var susval = [];
+				        	  var length = data.length-1;
+				        	  var enc = data[length].substring(0,16);
+					        	for(var i = 0;i<data.length;i++){
+					        		susval.push(dec(enc,data[i]));
+					        	}
+					        	   	          
+							response( susval ); 
+				          }
+				        });
+				      },
+				      minLength: 1,
+				      autoFill: true,
+				      change: function(event, ui) {
+				    	 if (ui.item) {   	        	  
+				        	  return true;    	            
+				          } else {
+				        	  alert("Please Enter Approved Personal No");
+				        	  document.getElementById("personnel_no").value="";
+				        	  susNoAuto.val("");	        	  
+				        	  susNoAuto.focus();
+				        	  return false;	             
+				          }   	         
+				      }, 
+				      select: function( event, ui ) {
+				    	
+				      } 	     
+				}); 			
+		});
+	 function onlyAlphabets(e, t) {
+		    return (e.charCode > 64 && e.charCode < 91) || (e.charCode > 96 && e.charCode < 123) || e.charCode == 32;   
+	}
+	 function downloaddata(personnel_no){
+			$("#personnel_no_d").val(personnel_no);
+			document.getElementById('downloadForm').submit();	 
+				
+		}
+	 </script>

@@ -1,0 +1,65 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+	
+	 	    <!-- <property name="url" value="jdbc:postgresql://131.3.54.129:5432/misodb29nov24" />  -->
+		    <!--  <property name="url" value="jdbc:postgresql://localhost:5433/miso10march" />   -->
+		<property name="url" value="jdbc:postgresql://192.168.15.126:5434/MISO" />  
+		<property name="username" value="postgres" />
+		<property name="password" value="Bisag@321" />
+	</bean>
+	
+	<bean id="savedRequestAwareAuthenticationSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<property name="targetUrlParameter" value="targetUrl" />
+	</bean>
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+ 	    <property name="dataSource">  	 
+ 	    	<ref bean="dataSource"/>
+ 	   	</property>
+ 	   	<property name="annotatedClasses">
+			<list>
+				<value>com.models.Role</value>
+				<value>com.models.UserAttempts</value>
+				<!-- <value>com.models.UserRegistration</value> -->
+				<value>com.models.UserRole</value>
+			</list>
+    	</property>
+    </bean>
+     <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    	<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<!-- Start OLAP Connection String -->
+<!-- 	<bean id="dataSourceOLAP_DB" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> -->
+<!-- 		<property name="driverClassName" value="org.postgresql.Driver" /> -->
+<!-- 		<property name="url" value="jdbc:postgresql://localhost:5434/miso_psg_olap" />  -->
+<!-- 		<property name="username" value="postgres" /> -->
+<!-- 		<property name="password" value="postgres" /> -->
+<!-- 	</bean> -->
+<!-- 	<bean id="sessionFactoryOLAP" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"> -->
+<!--  	    <property name="dataSource"> <ref bean="dataSourceOLAP_DB"/></property> -->
+<!--  	</bean> -->
+	
+	<!-- Start OLAP Connection String -->
+	<bean id="dataSourceOLAP" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		
+  <property name="url" value="jdbc:postgresql://192.168.15.126:5434/MISO_OLAP" />  
+
+		<property name="username" value="postgres" />
+		<property name="password" value="Bisag@321" />
+	</bean>
+	
+	
+	<bean id="sessionFactoryOLAP" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+ 	    <property name="dataSource"> <ref bean="dataSourceOLAP"/></property>
+ 	</bean>
+     <bean id="transactionManagerOLAP" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    	<property name="sessionFactory" ref="sessionFactoryOLAP"/>
+	</bean>
+	<!-- End OLAP Connection String -->
+</beans>

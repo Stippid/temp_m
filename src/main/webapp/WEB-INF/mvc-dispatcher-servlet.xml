@@ -1,0 +1,2466 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/task 
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+	<!-- <beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" 
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc" 
+		xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"> -->
+
+
+	<task:annotation-driven />
+	<bean id="CronSchedulingService"
+		class="com.schedule.service.CronSchedulingService"></bean>
+
+	<context:component-scan
+		base-package="com.controller.*" />
+
+
+	<mvc:annotation-driven validator="validator">
+		<mvc:argument-resolvers>
+			<bean
+				class="com.github.dandelion.datatables.extras.spring3.ajax.DatatablesCriteriasMethodArgumentResolver" />
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
+
+	<mvc:resources mapping="/admin/js/**"
+		location="/admin/js/" cache-period="31556926" />
+	<mvc:resources mapping="/login_file/**"
+		location="/admin/login_file/" cache-period="31556926" />
+	<mvc:resources mapping="/doc/**" location="/doc/"
+		cache-period="31556926" />
+	<mvc:resources mapping="/dandelion/**"
+		location="classpath:/META-INF/resources/dandelion/"
+		cache-period="31556926" />
+
+	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
+		<property name="prefix"> <value>/WEB-INF/pages/</value> </property> <property 
+		name="suffix"> <value>.jsp</value> </property> </bean> -->
+
+	<!-- Apache Tiles -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass">
+			<value>
+				org.springframework.web.servlet.view.tiles3.TilesView
+			</value>
+		</property>
+		<property name="order" value="0" />
+		<!-- <property name="redirectHttp10Compatible" value="false"></property> -->
+	</bean>
+	<bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:global" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+	<!-- Localization of hibernate messages during validation! -->
+	<bean id="validationMessageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basename" value="classpath:validation" />
+	</bean>
+
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="validationMessageSource">
+			<ref bean="validationMessageSource" />
+		</property>
+	</bean>
+
+
+	<!--Start OLAP Connection String -->
+	<bean id="dataSourceNAOLAP"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="org.postgresql.Driver" />
+		  <property name="url" value="jdbc:postgresql://192.168.15.126:5434/MISO_OLAP" />   
+			  
+			 <!-- <property name="url" value="jdbc:postgresql://131.3.54.129:5432/miso_psg_olap" /> -->  
+			
+		
+		<property name="username" value="postgres" />
+		<property name="password" value="Bisag@321" />
+	</bean>
+
+	<!-- <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"> 
+		<property name="paramName" value="locale" /> </bean> -->
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- setting maximum upload size -->
+		<!-- the maximum file size in bytes (2097152 B = 2 MB) -->
+		<property name="maxUploadSize" value="2097152000" />
+	</bean>
+
+	<bean id="dataSourceNA"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="org.postgresql.Driver" />
+		
+     <!-- <property name="url"
+			value="jdbc:postgresql://131.3.54.129:5432/misodb29nov24"/>  -->
+			
+			   <property name="url" value="jdbc:postgresql://192.168.15.126:5434/MISO" /> 
+			
+		<property name="username" value="postgres" />
+		<property name="password" value="Bisag@321" />
+	</bean>
+
+	<!--Start OLAP Connection String -->
+	<bean id="dataSourceOLAP"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="org.postgresql.Driver" />
+
+	      <property name="url"
+			value="jdbc:postgresql://192.168.15.126:5434/MISO_OLAP"/>    
+		 	<!-- <property name="url"
+			value="jdbc:postgresql://131.3.54.129:5435/miso_psg_olap"/>  -->
+		<property name="username" value="postgres" />
+		<property name="password" value="Bisag@321" />
+	</bean>
+
+	<bean id="ORBAT_ReportDAO"
+		class="com.dao.Reports.ORBAT_ReportDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="CUE_ReportDAO" class="com.dao.Reports.CUE_ReportDAOImp">
+		<property name="dataSource" ref="dataSourceOLAP" />
+	</bean>
+	<bean id="TMS_ReportDAO" class="com.dao.Reports.TMS_ReportDAOImp">
+		<property name="dataSource" ref="dataSourceOLAP" />
+	</bean>
+	<bean id="TMS_OLAP_CRONTABDAO"
+		class="com.dao.Reports.TMS_OLAP_CRONTABDAOImpl">
+		<property name="dataSource" ref="dataSourceOLAP" />
+	</bean>
+	<!-- END OLAP Connection String -->
+
+<bean id="UserLoginDAO"
+		class="com.dao.login.UserLoginDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="RoleBaseMenuDAO"
+		class="com.dao.login.RoleBaseMenuDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="UserMSTRDAO" class="com.dao.RBAC.UserMSTRDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="User_RegistraionDAO"
+		class="com.dao.login.User_RegistraonDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- Start ORBAT DAO -->
+	<bean id="FormationDashboardDAO"
+		class="com.dao.Dashboard.FormationDashboardDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="OrbatDashboardDAO"
+		class="com.dao.Dashboard.OrbatDashboardDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="UnitProfileDAO" class="com.dao.orbat.UnitProfileDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Orbat_MasterDAO"
+		class="com.dao.orbat.Orbat_MasterDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ReportsDAO" class="com.dao.orbat.ReportsDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Loc_and_NrsDAO" class="com.dao.orbat.Loc_and_NrsDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="AllMethodsDAO" class="com.dao.orbat.AllMethodsDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="NMBReportDAO" class="com.dao.orbat.NMBReportDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Create_Unit_moveDAO"
+		class="com.dao.orbat.Create_Unit_moveDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<!-- END ORBAT DAO -->
+
+	<!-- Start CUE DAO -->
+	<bean id="CueDashboardDAO"
+		class="com.dao.Dashboard.CueDashboardDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ceoDAO" class="com.dao.cue.ceoDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Cue_wepe_conditionDAO"
+		class="com.dao.cue.Cue_wepe_conditionDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Personnel_EntitlementDAO"
+		class="com.dao.cue.Personnel_EntitlementDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Wet_Pet_Fet_SuperDAO"
+		class="com.dao.cue.Wet_Pet_Fet_SuperDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ProvisionPolicyDAO"
+		class="com.dao.cue.ProvisionPolicyDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="IncrementDecrementDAO"
+		class="com.dao.cue.IncrementDecrementDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="WeaponAuthUnderModiDAO"
+		class="com.dao.cue.WeaponAuthUnderModiDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="IncDecFootnotesDAO"
+		class="com.dao.cue.IncDecFootnotesDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="cueStandardEntitlementTransportDAO"
+		class="com.dao.cue.cueStandardEntitlementTransportDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="TransportAuthorizationUnderModificationDAO"
+		class="com.dao.cue.TransportAuthorizationUnderModificationDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="WePeInceDecrTransportFootnoteDAO"
+		class="com.dao.cue.WePeInceDecrTransportFootnoteDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="WepePersMdfsDAO" class="com.dao.cue.WepePersMdfsDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="WEPELinkSusDAO" class="com.dao.cue.WEPELinkSusDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="poolDAO" class="com.dao.cue.Cap_gs_poolDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="sawDAO" class="com.dao.cue.StandardAuthWeaponDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="aptDAO" class="com.dao.cue.AppTradesDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ConversionDAO" class="com.dao.cue.ConversionDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="WEPEamendmentDAO"
+		class="com.dao.cue.WEPEamendmentDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Cue_MasterDAO" class="com.dao.cue.Cue_MasterDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Cue_Wet_Pet_Amdt_EditDAO"
+		class="com.dao.cue.Cue_Wet_Pet_Amdt_EditDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="CUE_PRF_MasterDAO"
+		class="com.dao.cue.CUE_PRF_MasterDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ItemMasterDAO" class="com.dao.cue.ItemMasterDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Capture_critical_storeDAO"
+		class="com.dao.Reports.Capture_critical_storeDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Capture_second_third_lineDAO"
+		class="com.dao.Reports.Capture_second_third_lineDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="CustomQueryDAO"
+		class="com.dao.Reports.CustomQueryDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- End CUE DAO -->
+
+	<!-- End TMS DAO -->
+
+	<bean id=" TMS_base_work_mstrDAO"
+		class="com.dao.tms.TMS_base_work_mstrDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id=" Oh_Qfd_DAO" class="com.dao.tms.Oh_Qfd_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Qfd_DAO" class="com.dao.tms.Qfd_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Track_status_DAO"
+		class="com.dao.tms.Track_status_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Veh_cat_link_DAO"
+		class="com.dao.tms.Veh_cat_link_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Upload_Excel_Dao"
+		class="com.dao.tms.Upload_Excel_Daoimpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="TmsDashboardDAO"
+		class="com.dao.Dashboard.TmsDashboardDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="MctSlotDAO" class="com.dao.tms.MctSlotDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="MakeMasterDAO" class="com.dao.tms.MakeMasterDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Tms_ModelDAO" class="com.dao.tms.Tms_ModelDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="TMSCronSchedulingDAO"
+		class="com.dao.tms.TMSCronSchedulingDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Search_Ba_AllocDAO"
+		class="com.dao.tms.Search_Ba_AllocDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="tmsConversionRequestGstoSplVehDAO"
+		class="com.dao.tms.tmsConversionRequestGstoSplVehDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Search_baDAO" class="com.dao.tms.Search_baDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="MVCRDAO" class="com.dao.tms.MVCRDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="RioDAO" class="com.dao.tms.RioDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Type_of_stockDAO"
+		class="com.dao.tms.Type_of_stockDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Capture_rel_orderDAO"
+		class="com.dao.tms.Capture_rel_orderDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="MCRDAO" class="com.dao.tms.MCRDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="tmsCVehicleDAO" class="com.dao.tms.tmsCVehicleDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="C_VehicleDAO" class="com.dao.tms.C_VehicleDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ExportDataDAO" class="com.dao.tms.ExportDataDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Tms_AnimalDao" class="com.dao.tms.Tms_AnimalDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="AnimalEquinesDAO"
+		class="com.dao.tms.AnimalEquinesDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="AVehDailyReceiptIssuereportDAO"
+		class="com.dao.tms.AVehDailyReceiptIssuereportDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="unit_holding_details_AvehDAO"
+		class="com.dao.tms.unit_holding_details_AvehDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="DailyReceiptIssuereportDAO"
+		class="com.dao.tms.DailyReceiptIssuereportDAOimpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="vehicleDetailsDAO"
+		class="com.dao.tms.vehicleDetailsDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="vehiclestatus_nodaldteDAO"
+		class="com.dao.tms.vehiclestatus_nodaldteDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Tms_Ad_HocDao" class="com.dao.tms.Tms_Ad_HocDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- End TMS DAO -->
+
+
+	<!-- MMS START -->
+
+	<bean id="wpncatstatus_nodaldteDAO"
+		class="com.dao.mms.wpncatstatus_nodaldteDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="MmsDashboardDAO"
+		class="com.dao.Dashboard.MmsDashboardDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="m1DAO" class="com.dao.mms.MMS_Mlccs_MainDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="m2DAO" class="com.dao.mms.MMS_Unit_hldgDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="m3DAO" class="com.dao.mms.MMS_Depot_hldgDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="m4DAO" class="com.dao.mms.MMS_StoresDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="m5DAO" class="com.dao.mms.MMS_RO_RIO_GenerationDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="m6DAO" class="com.dao.mms.MMS_ReportsDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="m7DAO" class="com.dao.mms.MMS_ADMIN_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="m8DAO" class="com.dao.mms.MMS_UploadExcelDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="mmsCommonDAO" class="com.dao.mms.Mms_Common_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="uploadvalidatesDAO"
+		class="com.dao.mms.mms_upload_validateDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="CVehDailyReceiptIssuereportDAO"
+		class="com.dao.tms.CVehDailyReceiptIssuereportDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="MMS_Adhoc_DAO" class="com.dao.mms.MMS_Adhoc_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="MMS_ReportDAO" class="com.dao.Reports.MMS_ReportDAOImp">
+		<property name="dataSource" ref="dataSourceOLAP" />
+	</bean>
+	<!--MMS END -->
+	<!-- help desk -->
+	<bean id="HelpDAO" class="com.dao.helpDesk.HelpDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="DashboardAccessLogDAO"
+		class="com.dao.helpDesk.DashboardAccessLogDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- help desk end -->
+
+	<!-- PSG Upload Start -->
+
+	<bean id="PSGDAO" class="com.dao.psg.PSGdDAOIMPL">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<!-- PSG Upload End -->
+
+	<!-- MNH MODULE -->
+
+	<!-- MASTER MODULE start -->
+	<bean id="mstr_Food_Detail_DAO"
+		class="com.dao.mnh.mstr_Food_Detail_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="mstr_Sho_Fho_Svl_Detail_DAO"
+		class="com.dao.mnh.mstr_Sho_Fho_Svl_Detail_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="System_Code_DAO"
+		class="com.dao.mnh.mstr_System_Code_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Daily_Disease_SVLDao"
+		class="com.dao.mnh.mstr_Daily_Disease_SVLDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="OpdSplDepartmentDAO"
+		class="com.dao.mnh.mstr_OpdSplDepartmentDAOIMPL">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Rank_CodeDAO" class="com.dao.mnh.mstr_Rank_CodeDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Icd_CodeDAO" class="com.dao.mnh.mstr_Icd_codeDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Search_Hospital_DAO"
+		class="com.dao.mnh.mstr_Search_Hospital_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="MNH_Common_DAO" class="com.dao.mnh.MNH_Common_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="mstr_bed_authoDAO"
+		class="com.dao.mnh.mstr_bed_authoDAOIMPL">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- MASTER MODULE END -->
+
+	<!-- MNH NEW INPUT STARTS -->
+	<bean id="InvalidmentDAO" class="com.dao.mnh.InvalidmentDAOIMPL">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="mnh_hivDAO" class="com.dao.mnh.mnh_hivDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="mnh_input_mortalityDAO"
+		class="com.dao.mnh.mnh_input_mortalityDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="mnh_input_opd_spl_casesDAO"
+		class="com.dao.mnh.mnh_input_opd_spl_casesDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="mnh_inputs_bed_occupancyDAO"
+		class="com.dao.mnh.mnh_inputs_bed_occupancyDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="OPDCasesDao" class="com.dao.mnh.OPDCasesDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="StillinHospDetailsDao"
+		class="com.dao.mnh.StillinHospDetailsDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+
+	<bean id="mnh_input_strengthDetailsDAO"
+		class="com.dao.mnh.mnh_input_strengthDetailsDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- MNH NEW INPUT END -->
+
+	<!-- MNH NEW DGMS INPUT -->
+	<bean id="Daily_Disease_serveillenceDAO"
+		class="com.dao.mnh.Daily_Disease_serveillenceDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Vip_Off_AdmDAO" class="com.dao.mnh.Vip_Off_AdmDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<bean id="Offic_Admi_AmcAdcMns_Dao"
+		class="com.dao.mnh.Offic_Admi_AmcAdcMns_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Unusual_Occurrence_DAO"
+		class="com.dao.mnh.Unusual_Occurrence_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Daily_morning_bed_stateDAO"
+		class="com.dao.mnh.Daily_morning_bed_stateDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- MNH NEW DGMS INPUT End -->
+
+
+	<!-- MNH NEW DGMS INPUT REPORT 17-07-2020 END -->
+
+	<bean id="Daily_Disease_ReportDAO"
+		class="com.dao.mnh.Daily_Disease_ReportDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Daily_Morning_bed_state_ReportDAO"
+		class="com.dao.mnh.Daily_Morning_bed_state_ReportDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Daily_vip_officer_ReportDAO"
+		class="com.dao.mnh.Daily_vip_officer_ReportDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Daily_UnusuaLOccurrenceReportDAO"
+		class="com.dao.mnh.Daily_UnusuaLOccurrenceReportDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Daily_amc_adc_mns_ReportDAO"
+		class="com.dao.mnh.Daily_amc_adc_mns_ReportDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- MNH NEW DGMS INPUT 17-07-2020 END -->
+
+	<bean id="mnh7_Dao" class="com.dao.mnh.MNH_ReportsDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+
+	<!-- MNH DASHBOARD -->
+
+	<bean id="MNHDashboardFinalDAO"
+		class="com.dao.Dashboard.MNHDashboardFinalDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- <bean id="MnhDashboardDAO" class="com.dao.mnh_Dashboard.MnhDashboardDAOImpl"> 
+		<property name="dataSource" ref="dataSourceNA" /> </bean> <bean id="MNHDashboardFinalDAO" 
+		class="com.dao.mnh_Dashboard.MNHDashboardFinalDAOImpl"> <property name="dataSource" 
+		ref="dataSourceNA" /> </bean> -->
+	<!-- END DASHBOARD -->
+
+	<!-- MNH DATA STATUS -->
+
+	<bean id="mnh5_Dao" class="com.dao.mnh.MNH_DataStatusDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- END DATA STATUS -->
+
+	<!-- MNH REMINDER -->
+	<bean id="mnh6_Dao" class="com.dao.mnh.MNH_RemindersDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- END MNH REMINDER -->
+
+	<!-- MNH NEW Data_Scrutiny 24-07-2020 -->
+	<bean id="lvl_dao" class="com.dao.mnh.Scrutiny_Level1_4DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="arc_Dao"
+		class="com.dao.mnh.Scrutiny_Arogya_ChecksDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ps_Dao"
+		class="com.dao.mnh.Scrutiny_Patient_SearchDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<!-- MNH NEW Data_Scrutiny end 24-07-2020 -->
+
+	<!-- SHO_FHO -->
+
+	<bean id="mnhsh_Dao"
+		class="com.dao.mnh.SHO_FHO_EPID_MosquitoDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Surve_Dao"
+		class="com.dao.mnh.SHO_FHO_SurveillanceDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="strengthDao" class="com.dao.mnh.SHO_FHO_StrengthDaoIMPL">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="FHO_SHO_PreventiveDAO"
+		class="com.dao.mnh.FHO_SHO_PreventiveDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="mnh_input_controllimitDAO"
+		class="com.dao.mnh.mnh_input_controllimitDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- END SHO FHO -->
+
+	<!-- MS Access Upload Data -->
+	<bean id="MsAccessDataUploadDAO"
+		class="com.dao.mnh.MsAccessDataUploadDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- -->
+	<!-- MNH END MODULE -->
+
+
+
+	<!--it asset starts -->
+	<!-- MASTERS START -->
+	<bean id="Ram_mstrDAO"
+		class="com.dao.itasset.masters.Ram_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Type_mstrDAO"
+		class="com.dao.itasset.masters.Type_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Dply_env_mstrDAO"
+		class="com.dao.itasset.masters.Dply_env_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Hdd_mstrDAO"
+		class="com.dao.itasset.masters.Hdd_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Office_mstrDAO"
+		class="com.dao.itasset.masters.Office_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Os_firmware_mstrDAO"
+		class="com.dao.itasset.masters.Os_firmware_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Os_mstrDAO"
+		class="com.dao.itasset.masters.Os_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Processor_or_typeDAO"
+		class="com.dao.itasset.masters.Processor_or_typeDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Type_of_hw_mstrDAO"
+		class="com.dao.itasset.masters.Type_of_hw_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Ups_capacity_mstrDAO"
+		class="com.dao.itasset.masters.Ups_capacity_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Ups_type_mstrDAO"
+		class="com.dao.itasset.masters.Ups_type_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Year_of_manufacturing_mstrDAO"
+		class="com.dao.itasset.masters.Year_of_manufacturing_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Year_of_proc_mstrDAO"
+		class="com.dao.itasset.masters.Year_of_proc_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Asset_mstrDAO"
+		class="com.dao.itasset.masters.Asset_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="PeripheralMasterDAO"
+		class="com.dao.itasset.masters.PeripheralMasterDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="ModelDAO" class="com.dao.itasset.masters.ModelDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<bean id="Make_Dao" class="com.dao.itasset.masters.Make_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="ANTIVIRUSDAO"
+		class="com.dao.itasset.masters.ANTIVIRUSDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Connectivity_DAO"
+		class="com.dao.itasset.masters.Connectivity_DAOimpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Hardware_interface_DAO"
+		class="com.dao.itasset.masters.Hardware_interface_DAOimpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Ethernet_Port_DAO"
+		class="com.dao.itasset.masters.Ethernet_Port_DAOIMPL">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Management_Layer_DAO"
+		class="com.dao.itasset.masters.Management_Layer_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Budget_mstrDAO"
+		class="com.dao.itasset.masters.Budget_mstrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Network_Features_DAO"
+		class="com.dao.itasset.masters.Network_Features_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<!-- MASTERS END -->
+
+	<!-- START WORK ORDER -->
+
+	<bean id="WOComputing_Asset_Dao"
+		class="com.dao.WorkOrder.WOComputing_Asset_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="WOPeripheral_Asset_Dao"
+		class="com.dao.WorkOrder.WOPeripheral_Asset_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- END WORK ORDER -->
+
+	<bean id="computing_assets_DAO"
+		class="com.dao.Assets.computing_assets_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="PeripheralDao"
+		class="com.dao.Peripheral.PeripheralDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<!-- Start Inter Unit Transfer -->
+	<bean id="interUnitTransf_DAO"
+		class="com.dao.Assets.interUnitTransf_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<!-- END Inter Unit Transfer -->
+
+	<bean id="Assests_Serviceablity_details_DAO"
+		class="com.dao.itasset.Report.Assests_Serviceablity_details_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<!-- START REPORT -->
+
+	<bean id="IT_Assets_Serviceable_Unserviceable_DAO"
+		class="com.dao.itasset.Report.IT_Assets_Serviceable_Unserviceable_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="UnserviceableDao"
+		class="com.dao.itasset.Report.UnserviceableDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<!-- END REPORT -->
+
+	<!-- Start Hardware -->
+
+	<bean id="Hardware_DAO" class="com.dao.Assets.Hardware_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Peripheral_Hardware_DAO"
+		class="com.dao.Assets.Peripheral_Hardware_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- End Hardware -->
+
+
+	<!-- Start Report -->
+
+	<bean id="All_India_holdingDao"
+		class="com.dao.itasset.Report.All_India_holdingImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Asset_All_India_Dao"
+		class="com.dao.itasset.Report.Asset_All_India_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="All_India_Holding_LessDao"
+		class="com.dao.itasset.Report.All_India_Holding_LessDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- End Report -->
+
+	<!-- Start Impoort -->
+
+	<bean id="DropdownDao" class="com.dao.dropdown.DropdownDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- END Impoort -->
+
+
+
+
+	<!-- Start Deshboard -->
+
+	<bean id="DashboardDao"
+		class="com.dao.it_asset_dashboard.DashboardDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<!-- End Deshboard -->
+	<!-- it asset ends -->
+
+
+	<!-- Start Civilian -->
+	<bean id="Posting_In_Out_Civilian_DAO"
+		class="com.dao.psg.Civilian.Posting_In_Out_Civilian_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Civilian_dtlDAO"
+		class="com.dao.psg.Civilian.Civilian_dtlDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<!-- Start civilian Master -->
+
+	<bean id="Cause_Of_Non_Effective_CivilianDAO"
+		class="com.dao.psg.Civilian_Master.Cause_Of_Non_Effective_CivilianDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Cadre_CivilianDAO"
+		class="com.dao.psg.Civilian_Master.Cadre_CivilianDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Pay_Level_DAO"
+		class="com.dao.psg.Civilian_Master.Pay_Level_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="CategoryDAO"
+		class="com.dao.psg.Civilian_Master.CategoryDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="DisabilityDAO"
+		class="com.dao.psg.Civilian_Master.DisabilityDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Pay_HeadDAO"
+		class="com.dao.psg.Civilian_Master.Pay_Head_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="ExservicemenDAO"
+		class="com.dao.psg.Civilian_Master.ExservicemenDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<!-- End civilian Master -->
+
+
+	<!-- Start Civilian Reports -->
+
+	<bean id="Services_SC_ST_DAO"
+		class="com.dao.psg.Civilian_Report.Services_SC_ST_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	
+	<bean id="Arm_Service_Wise_RegularEst_Dao"
+		class="com.dao.psg.Civilian_Report.Arm_Service_Wise_RegularEst_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Arm_Service_Wise_NonRegularEst_Dao"
+		class="com.dao.psg.Civilian_Report.Arm_Service_Wise_NonRegularEst_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Organisation_Unit_wise_Dao"
+		class="com.dao.psg.Civilian_Report.Organisation_Unit_wise_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Total_Servant_SC_ST_OBC_Wise_DAO"
+		class="com.dao.psg.Civilian_Report.Total_Servant_SC_ST_OBC_Wise_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- End Civilian Reports -->
+
+	<!-- End Civilian -->
+
+	<bean id="Psg_CommanDAO"
+		class="com.dao.psg.Master.Psg_CommanDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+
+	<!-- psg jco transaction -->
+	<bean id="Re_call_jco_DAO"
+		class="com.dao.psg.Jco_Transaction.Re_call_jco_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Marital_DiscordJCO_DAO"
+		class="com.dao.psg.Jco_Transaction.Marital_DiscordJCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Posting_In_Out_JCO_DAO"
+		class="com.dao.psg.Jco_Transaction.Posting_In_Out_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Field_serviceJcoDAO"
+		class="com.dao.psg.Jco_Transaction.Field_serviceJcoDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Certify_BCPC_DAO"
+		class="com.dao.psg.Jco_Transaction.Certify_BCPC_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- end -->
+
+
+	<!-- START JCO UPDATE -->
+	<bean id="Search_UpdatedJcoOr_DataDao"
+		class="com.dao.psg.Jco_Update_JcoData.Search_UpdatedJcoOr_DataDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="View_Update_JCODao"
+		class="com.dao.psg.Jco_Update_JcoData.View_Update_JCODaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- END JCO UPDATE -->
+
+	<!-- START JCO MASTER -->
+
+	<bean id="Record_OfficeDAO_JCO"
+		class="com.dao.Jco_Master.Record_OfficeDaoImpl_JCO">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Class_Pay_DAO_JCO"
+		class="com.dao.Jco_Master.Class_Pay_DaoImpl_JCO">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Pay_GroupDAO_JCO"
+		class="com.dao.Jco_Master.Pay_GroupDaoImpl_JCO">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Class_DAO_JCO"
+		class="com.dao.Jco_Master.Class_DaoImpl_JCO">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Trade_DAO_JCO"
+		class="com.dao.Jco_Master.Trade_DaoImpl_JCO">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ApptDAO" class="com.dao.Jco_Master.ApptDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="RankDAO" class="com.dao.Jco_Master.RankDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Promotional_Exam_DAO_JCO"
+		class="com.dao.Jco_Master.Promotional_Exam_DAOImpl_JCO">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Cause_Of_Non_EffectiveDAO_JCO"
+		class="com.dao.Jco_Master.Cause_Of_Non_EffectiveDAOImpl_JCO">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Gorkha_Domisile_DAO_JCO"
+		class="com.dao.Jco_Master.Gorkha_Domisile_DaoImpl_JCO">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Type_of_postDao"
+		class="com.dao.Jco_Master.Type_of_postDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<!-- -->
+
+	<!-- PSG JCO CANCELLATION -->
+
+	<bean id="ViewHistory_updateJcoDataDao"
+		class="com.dao.psg.jco_cancellation.ViewHistory_updateJcoDataDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Approve_ViewHistory_updateJcoDataDao"
+		class="com.dao.psg.jco_cancellation.Approve_ViewHistory_updateJcoDataDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- END -->
+
+	<!-- PSG JCO CENSUS -->
+
+	<bean id="Search_JCOsDao"
+		class="com.dao.psg.Jco_Census.Search_JCOsDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<!-- -->
+
+
+
+
+
+	<!-- PSG JCO POPUP HISTORY -->
+	<bean id="Name_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Name_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Appointment_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Appointment_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="IdentityCard_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.IdentityCard_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Add_Language_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Add_Language_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Update_Qualification_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Update_Qualification_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Pramotional_Exam_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Pramotional_Exam_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Rank_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Rank_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Religion_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Religion_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="MaritalStatus_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.MaritalStatus_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="UpdateChildDetails_PopUp_JCO"
+		class="com.dao.psg.JCO_Popup.Update_Child_Details_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Nok_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Nok_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Address_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Address_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Contact_Details_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Contact_Details_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Update_Battel_And_Physical_Casualty_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Update_Battel_And_Physical_Casualty_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Update_Discipline_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Update_Discipline_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Inter_Arm_Service_Transfer_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Inter_Arm_Service_Transfer_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Ssc_To_Permit_Commission_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Ssc_To_Permit_Commission_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Extension_Of_SSC_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Extension_Of_SSC_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Army_Course_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Army_Course_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Update_Bpet_Details_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Update_Bpet_Details_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Update_Firing_Standard_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Update_Firing_Standard_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Known_Allergy_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Known_Allergy_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Change_In_Medicle_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Change_In_Medicle_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Update_Visit_To_Foreign_Country_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Update_Visit_To_Foreign_Country_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Update_Awards_Medals_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Update_Awards_Medals_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Secondment_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Secondment_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Non_Effective_Status_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Non_Effective_Status_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Deserter_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Deserter_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="CSD_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.CSD_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Posting_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Posting_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Trade_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Trade_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Class_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Class_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Pay_Group_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Pay_Group_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="View_JCODao"
+		class="com.dao.psg.Jco_Service_Record.View_JCODaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<bean id="Date_Of_Seniority_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Date_Of_Seniority_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<bean id="Attachment_Details_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.Attachment_Details_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<!-- END -->
+	<!-- PSG JCO UPDATE CENSUS -->
+
+	<!-- Start JCO/OR Report -->
+	<!-- commented for jco -->
+	<bean id="NOK_Details_ContactNo_DAO"
+		class="com.dao.psg.Queries.NOK_Details_ContactNo_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="User_ParentArms_Jco_DAO"
+		class="com.dao.psg.JCO_Report.User_ParentArms_Jco_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Age_Service_Wise_Jco_DAO"
+		class="com.dao.psg.JCO_Report.Age_Service_Wise_Jco_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="JCO_Command_Wise_STR_DAO"
+		class="com.dao.psg.JCO_Report.JCO_Command_Wise_STR_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="JCO_ArmServices_RankWise_DAO"
+		class="com.dao.psg.JCO_Report.JCO_ArmServices_RankWise_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="JCO_Arms_ServiceWise_DAO"
+		class="com.dao.psg.JCO_Report.JCO_Arms_ServiceWise_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="JCO_Regular_ArmyPersonnel_DAO"
+		class="com.dao.psg.JCO_Report.JCO_Regular_ArmyPersonnel_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="JCO_Cause_of_wastage_DAO"
+		class="com.dao.psg.JCO_Report.JCO_Cause_of_Wastage_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Held_str_jco_JCO_DAO"
+		class="com.dao.psg.JCO_Report.Held_str_jco_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- End JCO/OR Report -->
+
+	<!-- PSG JCO UPDATE CENSUS -->
+
+
+	<bean id="Update_Census_Details_JCO_DAO"
+		class="com.dao.psg.JCO_Update_Census.Update_Census_Details_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- END -->
+
+	<!-- PSG JCO UPDATE CENSUS POPUP -->
+	<bean id="Gender_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.Gender_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Date_Of_Birth_Pop_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.Date_Of_Birth_Pop_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Address_Of_Birth_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.Address_Of_Birth_Pop_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Nationality_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.Nationality_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Mother_Tounge_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.Mother_Tounge_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Blood_Group_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.Blood_Group_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Height_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.Height_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="PanNo_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.PanNo_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="AadharNo_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.AadharNo_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Class_For_Enrollment_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.Class_For_Enrollment_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Rank_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.Rank_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Date_Of_Enrollment_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.Date_Of_Enrollment_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Date_Of_Attestation_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.Date_Of_Attestation_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Family_Details_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.Family_Details_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Sibling_Details_History_DAO"
+		class="com.dao.psg.JCO_Update_Census_Popup_History.Sibling_Details_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- END -->
+
+
+
+	<!-- officer's dao -->
+
+
+	<!-- Start Report -->
+	<bean id="Report_Serving_DAO"
+		class="com.dao.psg.Report.Report_Serving_DAO_Impl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Report_3008DAO"
+		class="com.dao.psg.Report.Report_3008DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ReportSearch_3008DAO"
+		class="com.dao.psg.Report.ReportSearch_3008DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	
+	<!-- End Report -->
+
+
+
+	<!-- Start Transaction -->
+
+
+	<bean id="Search_UpdateComm_Dao"
+		class="com.dao.psg.Transaction.Search_UpdateComm_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Search_Commissioning_LetterDAO"
+		class="com.dao.psg.Transaction.Search_Commissioning_LetterDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Search_CensusDao"
+		class="com.dao.psg.Transaction.Search_CensusDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Search_PostOutDao"
+		class="com.dao.psg.Transaction.Search_PostOutDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="CensusAprovedDAO"
+		class="com.dao.psg.Transaction.CensusAprovedDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="BattleCADAO"
+		class="com.dao.psg.Transaction.BattleCADAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Search_UpdateOffDataDao"
+		class="com.dao.psg.update_census_data.Search_UpdateOffDataDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Re_EmploymentDAO"
+		class="com.dao.psg.update_census_data.Re_EmploymentDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Search_cdaDAO"
+		class="com.dao.psg.update_census_data.Search_cdaDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="NotificationDao"
+		class="com.dao.psg.Transaction.NotificationDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ExtentionDAO"
+		class="com.dao.psg.update_census_data.ExtentionDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="View_update_Dao"
+		class="com.dao.psg.update_census_data.View_update_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Field_serviceDAO"
+		class="com.dao.psg.update_census_data.Field_serviceDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Link_Appointment_with_super_supernumeraryDAO"
+		class="com.dao.psg.Transaction.Link_Appointment_with_super_supernumeraryDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Maritial_DiscordDAO"
+		class="com.dao.psg.Transaction.Maritial_DiscordDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="SeniorityDAO"
+		class="com.dao.psg.update_census_data.SeniorityDAOimpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Search_Canteen_DAO"
+		class="com.dao.psg.update_census_data.Search_Canteen_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- end Transaction -->
+
+	<!-- Start Cancellation -->
+	<bean id="ViewHistory_updateOffrDataDao"
+		class="com.dao.psg.cancellation.ViewHistory_updateOffrDataDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Approve_ViewHistory_updateOffrDataDao"
+		class="com.dao.psg.cancellation.Approve_ViewHistory_updateOffrDataDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- End Cancellation -->
+
+	<!-- start master -->
+
+	<bean id="Casuality_Dao"
+		class="com.dao.psg.Master.Casuality_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="CopeCodeDAO" class="com.dao.psg.Master.CopeCodeDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="BPETresultDAO"
+		class="com.dao.psg.Master.BPETresultDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="BPETqtDAO" class="com.dao.psg.Master.BPETqtDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="FiringResultDAO"
+		class="com.dao.psg.Master.FiringResultDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="FiringQtDAO" class="com.dao.psg.Master.FiringQtDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Course_TypeDAO"
+		class="com.dao.psg.Master.Course_TypeDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Religion_DAO"
+		class="com.dao.psg.Master.Religion_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Eye_ColourDAO"
+		class="com.dao.psg.Master.Eye_ColourDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="RelationDAO" class="com.dao.psg.Master.RelationDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Medal_TypeDAO"
+		class="com.dao.psg.Master.Medal_TypeDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Type_of_EmploymentDAO"
+		class="com.dao.psg.Master.Type_of_EmploymentDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="BloodDao" class="com.dao.psg.Master.BloodDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="GenderDAO" class="com.dao.psg.Master.GenderDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Personnel_typeDAO"
+		class="com.dao.psg.Master.Personnel_typeDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="commisionDao"
+		class="com.dao.psg.Master.commisionDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Nationality_DAO"
+		class="com.dao.psg.Master.Nationality_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="MaritialDAO" class="com.dao.psg.Master.MaritialDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="DistrictDao" class="com.dao.psg.Master.DistrictDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="StateDao" class="com.dao.psg.Master.StateDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="City_DAO" class="com.dao.psg.Master.City_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="CountryDao" class="com.dao.psg.Master.CountryDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Hair_ColorDao"
+		class="com.dao.psg.Master.Hair_ColorDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="InstituteDAO"
+		class="com.dao.psg.Master.InstituteDAOimpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="LanguageDao" class="com.dao.psg.Master.LanguageDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="RhDao" class="com.dao.psg.Master.RhDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="QualificationDao"
+		class="com.dao.psg.Master.QualificationDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="HeightDAO" class="com.dao.psg.Master.HeightDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Med_cat_valuesDAO"
+		class="com.dao.psg.Master.Med_cat_valuesDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Foreign_language_DAO"
+		class="com.dao.psg.Master.Foreign_language_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Indian_languageDAO"
+		class="com.dao.psg.Master.Indian_languageDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="OperationDAO"
+		class="com.dao.psg.Master.OperationDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ProfessionDAO"
+		class="com.dao.psg.Master.ProfessionDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="BattalionDAO"
+		class="com.dao.psg.Master.BattalionDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="CompanyDAO" class="com.dao.psg.Master.CompanyDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="PlatoonDAO" class="com.dao.psg.Master.PlatoonDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="SpecializationDAO"
+		class="com.dao.psg.Master.SpecializationDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Link_DegreeDao"
+		class="com.dao.psg.Master.Link_DegreeDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Census_QualificationDAO"
+		class="com.dao.psg.Transaction.Census_QualificationDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Examination_PassedDAO"
+		class="com.dao.psg.Master.Examination_PassedDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="DegreeDao" class="com.dao.psg.Master.DegreeImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="CourseDAO" class="com.dao.psg.Master.CourseDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Mother_TongueDAO"
+		class="com.dao.psg.Master.Mother_TongueDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="TypeofEntryDao"
+		class="com.dao.psg.Master.TypeofEntryDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="LanguageStandardDAO"
+		class="com.dao.psg.Master.LanguageStandardDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="LanguageProfessionDAO"
+		class="com.dao.psg.Master.LanguageProfessionDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Purposeof_VisitDAO"
+		class="com.dao.psg.Master.Purposeof_VisitDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="AwardCatDAO" class="com.dao.psg.Master.AwardCatDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="PromotionalExamDAO"
+		class="com.dao.psg.Master.PromotionalExamDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="SecondedToDAO"
+		class="com.dao.psg.Master.SecondedToDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Filed_AreaDAO"
+		class="com.dao.psg.Master.Field_AreaDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Combination_Of_AllceaDAO"
+		class="com.dao.psg.Master.Combination_Of_AllceaDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Course_InstituteDAO"
+		class="com.dao.psg.Master.Course_InstituteDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Civilian_TradeDAO"
+		class="com.dao.psg.Master.Civilian_TradeDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+      
+	<bean id="Civilian_DesignationDAO"
+		class="com.dao.psg.Master.Civilian_DesignationDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Cause_Of_Non_EffectiveDAO"
+		class="com.dao.psg.Master.Cause_Of_Non_EffectiveDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Discipline_TrialedDAO"
+		class="com.dao.psg.Master.Discipline_TrialedDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Army_actDAO" class="com.dao.psg.Master.Army_ActDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Sub_clauseDAO"
+		class="com.dao.psg.Master.Sub_clauseDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="DivDAO" class="com.dao.psg.Master.DivDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<!-- end master -->
+
+	<!-- START TASK SCHEDULER -->
+	<bean id="JDBCMISO_OLAPDAO"
+		class="com.dao.psg.miso_olap.JDBCMISO_OLAPDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- END TASK SCHEDULING -->
+
+	<!-- Start Officer Report -->
+	<bean id="Commandwise_M_F_ReportDAO"
+		class="com.dao.psg.OfficerReport.Commandwise_M_F_ReportDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Parent_ArmDAO"
+		class="com.dao.psg.OfficerReport.Parent_Arm_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Wastage_of_Officer_by_Cause_DAO"
+		class="com.dao.psg.OfficerReport.Wastage_of_Officer_by_Cause_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Actual_Str_UserDAO"
+		class="com.dao.psg.OfficerReport.Actual_Str_UserDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Str_of_Regimental_OfcDAO"
+		class="com.dao.psg.OfficerReport.Str_of_Regimental_OfcDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Str_of_Army_PersonnelDAO"
+		class="com.dao.psg.OfficerReport.Str_of_Army_PersonnelDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Actual_Str_Rank_WiseDAO"
+		class="com.dao.psg.OfficerReport.Actual_Str_Rank_WiseDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ServiceWiseDao"
+		class="com.dao.psg.OfficerReport.ServiceWiseDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ctpart_i_unit_fmnsDao"
+		class="com.dao.psg.OfficerReport.ctpart_i_unit_fmnsDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="SearchByIdentityDao"
+		class="com.dao.psg.Report.SearchByIdentityDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- End Officer Report -->
+
+	<!-- Start POP UP HISTORY UPDATE OFFR -->
+
+	<bean id="Preview_PersonnelNo_DAO"
+		class="com.dao.psg.popup_history.Preview_PersonnelNo_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ChangeAddress_DAO"
+		class="com.dao.psg.popup_history.ChangeAddress_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Change_In_Medicle_History_DAO"
+		class="com.dao.psg.popup_history.Change_In_Medicle_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Canteen_DAO"
+		class="com.dao.psg.popup_history.Canteen_DAOimpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Update_Awards_Medal_History_DAO"
+		class="com.dao.psg.popup_history.Update_Awards_Medal_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<bean id="Update_Visit_Foriegn_Details_History_DAO"
+		class="com.dao.psg.popup_history.Update_Visit_Foriegn_Details_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Non_Effective_Status_History_DAO"
+		class="com.dao.psg.popup_history.Non_Effective_Status_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<bean id="Secondment_History_DAO"
+		class="com.dao.psg.popup_history.Secondment_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Extension_of_SSC_History_DAO"
+		class="com.dao.psg.popup_history.Extension_of_SSC_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Deserter_History_DAO"
+		class="com.dao.psg.popup_history.Deserter_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Update_Firing_Standard_History_DAO"
+		class="com.dao.psg.popup_history.Update_Firing_Standard_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Update_Battle_And_Physical_Casuality_History_DAO"
+		class="com.dao.psg.popup_history.Update_Battle_And_Physical_Casuality_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Update_Discipline_History_DAO"
+		class="com.dao.psg.popup_history.Update_Discipline_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Inter_Arm_Service_Transfer_History_DAO"
+		class="com.dao.psg.popup_history.Inter_Arm_Service_Transfer_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="SSC_To_Permit_Commission_History_DAO"
+		class="com.dao.psg.popup_history.SSC_To_Permit_Commission_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Known_AllergyDAO"
+		class="com.dao.psg.popup_history.Known_AllergyDAOimpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Change_Identity_History_DAO"
+		class="com.dao.psg.popup_history.Change_Identity_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Update_Child_Details_DAO"
+		class="com.dao.psg.popup_history.Update_Child_Details_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Change_NOKDAO"
+		class="com.dao.psg.popup_history.Change_NOKDAOimpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Change_Religion_History_DAO"
+		class="com.dao.psg.popup_history.Change_Religion_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Change_Name_History_DAO"
+		class="com.dao.psg.popup_history.Change_Name_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Change_Rank_History_DAO"
+		class="com.dao.psg.popup_history.Change_Rank_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Promotional_Exam_History_DAO"
+		class="com.dao.psg.popup_history.Promotional_Exam_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Change_Marital_Status_DAO"
+		class="com.dao.psg.popup_history.Change_Marital_Status_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Add_Language_History_DAO"
+		class="com.dao.psg.popup_history.Add_Language_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Update_Qualification_History_DAO"
+		class="com.dao.psg.popup_history.Update_Qualification_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Change_Appointment_History_DAO"
+		class="com.dao.psg.popup_history.Change_Appointment_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Change_Contact_History_DAO"
+		class="com.dao.psg.popup_history.Change_Contact_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Army_Course_History_DAO"
+		class="com.dao.psg.popup_history.Army_Course_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Update_BPETDetails_History_DAO"
+		class="com.dao.psg.popup_history.Update_BPETDetails_History_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<!-- End POP UP HISTORY UPDATE OFFR -->
+
+	<!-- Start Queries -->
+	<bean id="Blood_GroupDAO"
+		class="com.dao.psg.Queries.Blood_GroupDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Auth_and_Posted_StrengthDAO"
+		class="com.dao.psg.Queries.Auth_and_Posted_StrengthDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Marital_Status_PersonnelsDAO"
+		class="com.dao.psg.Queries.Marital_Status_PersonnelsDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Marital_Discord_CasesDAO"
+		class="com.dao.psg.Queries.Marital_Discord_CasesDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Record_ServiceDAO"
+		class="com.dao.psg.Queries.Record_ServiceDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Contact_Detailsof_PersDAO"
+		class="com.dao.psg.Queries.Contact_Detailsof_PersDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Age_Religion_StateWise_DAO"
+		class="com.dao.psg.Queries.Age_Religion_StateWise_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="LMC_State_DAO"
+		class="com.dao.psg.Queries.LMC_State_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="IAFF_3008DAO"
+		class="com.dao.psg.Queries.IAFF_3008DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="IAFF_3008_REPORT_DAO"
+		class="com.dao.psg.Queries.IAFF_3008_REPORT_DAO_Impl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="User_ParentArms_DAO"
+		class="com.dao.psg.Queries.User_ParentArms_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Regular_ArmyPersonnel_DAO"
+		class="com.dao.psg.Queries.Regular_ArmyPersonnel_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Arms_ServiceWise_DAO"
+		class="com.dao.psg.Queries.Arms_ServiceWise_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Age_Service_Wise_DAO"
+		class="com.dao.psg.Queries.Age_Service_Wise_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Cause_of_wastage_DAO"
+		class="com.dao.psg.Queries.Cause_of_Wastage_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ArmServices_RankWise_DAO"
+		class="com.dao.psg.Queries.ArmServices_RankWise_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Command_Wise_STR_DAO"
+		class="com.dao.psg.Queries.Command_Wise_STR_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Battle_Casuality_Query_DAO"
+		class="com.dao.psg.Queries.Battle_Casuality_Query_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- End Queries -->
+
+
+	<!-- Start Ad Hoc -->
+
+	<bean id="AdHocDAO" class="com.dao.psg.ad_hoc.AdHocDAOImp">
+		<property name="dataSourceOLAP" ref="dataSourceNAOLAP" />
+	</bean>
+	<!-- END Ad Hoc -->
+
+	<bean id="Emoluments_DAO"
+		class="com.dao.Emoluments.Emoluments_DAOimpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<bean id="AgencyDAO" class="com.dao.psg.Master.AgencyDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="BenefitsDAO" class="com.dao.psg.Master.BenefitsDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<bean id="search_formation_wise_dataDao"
+		class="com.dao.psg.Report.search_formation_wise_dataImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="search_Emoluments_wise_dataDao"
+		class="com.dao.psg.Report.search_Emoluments_wise_dataImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<bean id="emolumentDAO"
+		class="com.dao.Emoluments.emolumentDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="search_agencies_formationDao"
+		class="com.dao.psg.Report.search_agencies_formationImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+
+
+	<!-- officer's dao End -->
+
+
+	<!-- JCO dao Start -->
+
+	<bean id="emolumentJcoDAO"
+		class="com.dao.Jco_Emoluments.emolumentJcoDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<bean id="EmolumentsJco_DAO"
+		class="com.dao.Jco_Emoluments.EmolumentsJco_DAOimpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<!-- JCO dao End -->
+
+	<!-- bisag v2 250822 (notification) -->
+	<bean id="notificatioDAO"
+		class="com.dao.Notification.notificatioDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="PSGDashboardDAO"
+		class="com.dao.Dashboard.PSGDashboardDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="PSG_non_entriesDAO"
+		class="com.dao.psg.Queries.PSG_non_entriesDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<!-- start iut -->
+	<bean id="IUTDAO" class="com.dao.tms.IUTDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="abc_vehicleDetailsDAO"
+		class="com.dao.tms.abc_vehicleDetailsDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!-- end iut -->
+
+	<bean id="Ad_Hoc_mnh_Dao" class="com.dao.mnh.Ad_Hoc_mnh_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Ad_Hoc_mnh_Query_Dao"
+		class="com.dao.mnh.Ad_Hoc_mnh_Query_DaoImpl">
+		<property name="dataSourceOLAP" ref="dataSourceNAOLAP" />
+	</bean>
+
+	<bean id="Subject_Dao" class="com.dao.psg.Master.Subject_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+
+	
+	<!-- bisag 190623 v2 (new enhancement report by dev) -->
+	
+
+
+
+	<!-- bisag 190623 v2 (new enhancement report by hiral) -->
+	
+	
+	
+	
+
+	
+	
+	
+	
+<bean id="Change_TA_Status_History_DAO"
+	class="com.dao.psg.popup_history.Change_TA_Status_History_DAOImpl">
+	<property name="dataSource" ref="dataSourceNA" />
+</bean>
+    
+  		
+  	
+  		<bean id="TA_Status_Popup_JCO_DAO"
+		class="com.dao.psg.JCO_Popup.TA_Status_Popup_JCO_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Type_Of_Stock_ADAO"
+	class="com.dao.tms.Type_Of_Stock_ADAOImpl">
+	<property name="dataSource" ref="dataSourceNA" />
+</bean>
+
+<bean id="Type_Of_Stock_CDAO"
+	class="com.dao.tms.Type_Of_Stock_CDAOImpl">
+	<property name="dataSource" ref="dataSourceNA" />
+</bean>
+
+	<bean id="XMLDao"
+	class="com.dao.psg.xml.XMLDaoimpl">
+	<property name="dataSource" ref="dataSourceNA" />
+</bean>
+
+
+      <bean id="ViewApproved_xmlDao"
+	class="com.dao.psg.xml.ViewApproved_xmlDaoImpl">
+	<property name="dataSource" ref="dataSourceNA" />
+</bean>
+
+
+
+ <bean id="JCO_ORDashboardDAO" class="com.dao.Dashboard.JCO_ORDashboardDAOImpl"> 	
+  		<property name="dataSource" ref="dataSourceNA"/>  
+  				</bean>
+  <bean id="CIV_DashboardDAO" class="com.dao.Dashboard.CIV_DashboardDAoImpl"> 	
+  		<property name="dataSource" ref="dataSourceNA"/>  	</bean>
+  		
+  		<bean id="IAFF_3009_REPORT_DAO"
+		class="com.dao.psg.Queries.IAFF_3009_REPORT_DAO_Impl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="ReportSearch_3009DAO"
+		class="com.dao.psg.Report.ReportSearch_3009DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="Miso_Provider_APIDAO"  class="com.dao.MISO_PROVIDER_API.Miso_Provider_APIDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	<!-- civ nomi -->
+	<bean id="held_str_civ_report_nomi_Dao"
+		class="com.dao.psg.Civilian_Report.held_str_civ_report_nomi_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="held_civ_report_Dao"
+		class="com.dao.psg.Civilian_Report.held_civ_report_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+		<!-- add by jainisha-->
+	<bean id="Arm_Service_Dao" class="com.dao.psg.Enrollment_Reports.Arm_Service_Daoimpl">
+			<property name="dataSource" ref="dataSourceNA"/> 
+	</bean>	
+    <bean id="Details_of_non_effectiveDAO" class="com.dao.psg.Enrollment_Reports.Details_of_non_effectiveDAOImpl">
+			<property name="dataSource" ref="dataSourceNA"/> 
+	</bean>	
+	
+	 <bean id="Details_of_Special_ChildDAO" class="com.dao.psg.Enrollment_Reports.Details_of_Special_ChildDAOImpl">
+			<property name="dataSource" ref="dataSourceNA"/> 
+	</bean>	
+	
+	 <bean id="Details_of_Childern_Age_WiseDAO" class="com.dao.psg.Enrollment_Reports.Details_of_Childern_Age_WiseDAOImpl">
+			<property name="dataSource" ref="dataSourceNA"/> 
+	</bean>	
+	
+	 <bean id="Edn_Qual_Spouses_Dao" class="com.dao.psg.Enrollment_Reports.Edn_Qual_Spouses_DaoImpl">
+			<property name="dataSource" ref="dataSourceNA"/> 
+	</bean>	
+	
+	<bean id="Details_of_Border_Area_Pers_Dao"
+		class="com.dao.psg.Enrollment_Reports.Details_of_Border_Area_Pers_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="No_of_battle_Physical_Casualty_List_and_Total_Dao"
+		class="com.dao.psg.Enrollment_Reports.No_of_battle_Physical_Casualty_List_and_Total_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean
+		id="List_of_Married_and_Unmarried_Personnel_of_Units_Est_Dao"
+		class="com.dao.psg.Enrollment_Reports.List_of_Married_and_Unmarried_Personnel_of_Units_Est_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	 <bean id="Pers_Qual_Dao" class="com.dao.psg.Enrollment_Reports.Pers_Qual_Daoimpl">
+			<property name="dataSource" ref="dataSourceNA"/> 
+	</bean>
+	<bean id="Pers_Service_Dao" class="com.dao.psg.Enrollment_Reports.Pers_Service_Daoimpl">
+			<property name="dataSource" ref="dataSourceNA"/> 
+	</bean>	
+	
+	<bean id="Details_of_pan_uid_aadhaar_of_pers_from_hq_Dao" class="com.dao.psg.Enrollment_Reports.Details_of_pan_uid_aadhaar_of_pers_from_hq_DaoImpl">
+	<property name="dataSource" ref="dataSourceNA"/> 
+</bean>
+
+<bean id="Age_Wise_DtlsDAO" class="com.dao.psg.Enrollment_Reports.Age_Wise_DtlsDAOImpl">
+	<property name="dataSource" ref="dataSourceNA"/> 
+</bean>
+
+<bean id="Pers_Foreign_LanguageDAO"
+		class="com.dao.psg.Enrollment_Reports.Pers_Foreign_LanguageDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="Pers_Visited_Foreign_CountryDAO"
+		class="com.dao.psg.Enrollment_Reports.Pers_Visited_Foreign_CountryDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+
+	<bean id="Married_Pers_Without_ChildDAO"
+		class="com.dao.psg.Enrollment_Reports.Married_Pers_Without_ChildDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+		<!-- add by jainisha-->
+			<!-- add by yogesh-->
+		                <bean id="B_VehTmsDailyRecieptDao"
+                class="com.dao.tms.B_VehTmsDailyRecieptDAOImpl">
+                <property name="dataSource" ref="dataSourceNA" />
+        </bean>
+        <bean id="UNIT_DashboardDAO"
+		class="com.dao.Dashboard.UNIT_DashboardDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+        
+        	<!-- formation_reports -->
+  <bean id="Formation_reportsDAO"
+		class="com.dao.formation_report.Formation_reportsDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>        
+
+     
+	   <bean id="UNIT_Dashboard_Reports_DAO"
+		class="com.dao.Dashboard.UNIT_Dashboard_Reports_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean> 
+	
+	 <bean id="AddMctNoDAO"
+		class="com.dao.tms.AddMctNoDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean> 
+         <bean id="Discard_condition_five_yearsDAO"
+        class="com.dao.tms.Discard_condition_five_yearsDAOImpl">
+        <property name="dataSource" ref="dataSourceNA" />
+    </bean>
+    <!--  FP MIS MODULE START -->
+		<bean id="FP_MIS_MasterDAO" class="com.dao.fpmis.FP_MIS_MasterDAOImpl">
+                <property name="dataSource" ref="dataSourceNA" />
+      	</bean>
+      	<bean id="FP_MIS_ReportsDAO" class="com.dao.fpmis.FP_MIS_ReportsDAOImpl">
+                <property name="dataSource" ref="dataSourceNA" />
+      	</bean>
+      	<bean id="FP_MIS_TransactionDAO" class="com.dao.fpmis.FP_MIS_TransactionDAOImpl">
+                <property name="dataSource" ref="dataSourceNA" />
+      	</bean>
+      	<bean id="FP_MIS_AdvisoryDAO" class="com.dao.fpmis.FP_MIS_AdvisoryDAOImpl">
+                <property name="dataSource" ref="dataSourceNA" />
+      	</bean>
+      	<bean id="FP_MIS_DashboardDAO" class="com.dao.fpmis.FP_MIS_DashboardDAOImpl">
+                <property name="dataSource" ref="dataSourceNA" />
+      	</bean>
+      	<bean id="miso_proc_stateDAO" class="com.dao.fpmis.miso_proc_stateDAOImpl">
+                <property name="dataSource" ref="dataSourceNA" />
+      	</bean>
+<!-- FP MIS MODULE END -->
+
+<!--  Army Courses -->
+
+<bean id="Search_Army_CourseDAO"
+        class="com.dao.psg.update_census_data.Search_Army_CourseDAOImpl">
+        <property name="dataSource" ref="dataSourceNA" />
+   </bean>
+    
+<!-- END  Army Courses -->
+
+
+<!-- //for mns -->
+<bean id="ReportSearch_3008_mnsDAO"
+		class="com.dao.psg.Report.ReportSearch_3008_mnsDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+<bean id="Report_Serving_mnsDAO"
+		class="com.dao.psg.Report.Report_Serving_mnsDAO_Impl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	<bean id="IAFF_3008_REPORT_mns_DAO"
+		class="com.dao.psg.Queries.IAFF_3008_REPORT_mns_DAO_Impl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	<bean id="Comd_and_cont_inst_DAO" class="com.dao.orbat.Comd_and_cont_instDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	
+	<!-- IT Assets Personnel  --> 
+	
+	<bean id="genr_sanctionformDAO" class="com.dao.itasset.WorkOrder.genr_sanctionformDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	<bean id="TypewiseRoleMaster_DAO"
+		class="com.dao.itasset.WorkOrder.TypewiseRoleMaster_DAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	
+	<!-- CUE  --> 
+	<bean id="Cue_wetpet_validuptoDAO" class="com.dao.cue.Cue_wetpet_validuptoDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	<bean id="Cue_wepe_validuptoDAO" class="com.dao.cue.Cue_wepe_validuptoDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	<!-- scheduling  -->
+	
+	<bean id="scheduleLockDAO" class="com.dao.scheduleLock.scheduleLockDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	<!-- Aviation -->
+	
+	<bean id="ActSlotDAO" class="com.dao.avation.ActSlotDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="MakeMasterAviationDAO"
+		class="com.dao.avation.MakeMasterAviationDAOImp">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="DACRDAO" class="com.dao.avation.DACRDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+
+	<bean id="AddActNoDAO" class="com.dao.avation.AddActNoDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<bean id="AVNDRRDAO" class="com.dao.avation.AVNDRRDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	<!-- animal census -->
+	
+	<bean id="Animal_Census_Dao"
+		class="com.dao.Animal.Animal_Census_DaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	<bean id="ADCRDAO"
+		class="com.dao.Animal.ADCRDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	<bean id="Animal_Str_incr_decrDAO"
+		class="com.dao.Animal.Animal_Str_incr_decrDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	<!--HTO  -->
+	<bean id="sd_relief_progeam_DAO"
+		class="com.dao.HTO.sdReliefProgramDAOImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	<bean id="InspectionReportsDao" class="com.dao.InspectionReports.InspectionReportDaoimpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+	
+	
+	<bean id="InspectionReportPhaseIIDao" class="com.dao.InspectionReports.InspectionReportPhaseIIDaoImpl">
+		<property name="dataSource" ref="dataSourceNA" />
+	</bean>
+<!--INSP  -->
+
+	
+	
+</beans>
+

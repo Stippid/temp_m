@@ -1,0 +1,45 @@
+.rc-handle-container {
+  position: relative;
+}
+.rc-handle {
+  position: absolute;
+  width: 7px;
+  cursor: ew-resize;
+  margin-left: -3px;
+  z-index: 2;
+}
+table.rc-table-resizing {
+  cursor: ew-resize;
+}
+table.rc-table-resizing thead,
+table.rc-table-resizing thead > th,
+table.rc-table-resizing thead > th > a {
+  cursor: ew-resize;
+}
+
+table.report_print_scroll {
+	display:block;
+	max-height:500px;
+    overflow-y:scroll;
+    position: relative;
+}
+
+.report_print_scroll tbody {
+    width:100%; 
+    scrollbar-width: thin;
+}
+.report_print_scroll thead {
+    width:100%;
+    table-layout:fixed;
+    
+    position: sticky;
+    top: -1px;
+}
+.report_print_scroll tbody tr {
+    width:100%;
+    table-layout:fixed;
+}
+
+.watermarked table  {
+    word-break: break-all;
+}

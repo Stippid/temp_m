@@ -1,0 +1,928 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+ <session-factory name="">
+
+          
+  <!-- Database connection settings -->   
+  <property name="connection.driver_class">org.postgresql.Driver</property>
+
+   <!-- <property name="connection.url">jdbc:postgresql://131.3.54.129:5432/misodb29nov24</property>  -->  
+  <property name="connection.url">jdbc:postgresql://192.168.15.126:5434/MISO</property> 
+   <!-- server path -->
+       
+  <property name="connection.username">postgres</property>
+  <property name="connection.password">Bisag@321</property>
+  <!-- JDBC connection pool (use the built-in) -->
+  <property name="connection.pool_size">1000</property>
+  <!-- SQL dialect -->
+  <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+  <!-- Enable Hibernate's automatic session context management -->
+  <property name="current_session_context_class">thread</property>
+  <!-- Disable the second-level cache -->
+  <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+  <!-- Echo all executed SQL to stdout -->
+  <property name="show_sql">true</property>
+  <!-- Drop and re-create the database schema on startup -->
+  <property name="hbm2ddl.auto">update</property>
+  <!-- <property name="hbm2ddl.auto">validate</property> 
+  
+  
+  
+ Start Login Model -->
+  <mapping class="com.models.Role"/>
+  <mapping class="com.models.UserAttempts"/>
+  <mapping class="com.models.UserLogin"/>
+  <mapping class="com.models.UserRole"/>
+  <mapping class="com.models.Roleinformation"/>
+  <mapping class="com.models.State"/>
+  <mapping class="com.models.District"/>
+  <mapping class="com.models.login.Tb_Miso_HTover"/>
+  <mapping class="com.models.login.Tb_Miso_OCSP_Verify_Users"/>
+  <mapping class="com.models.login.TB_MISO_USER_REGISTRATION"/>
+   <mapping class="com.models.login.TB_MISO_WHATS_NEW"/>
+  <mapping class="com.models.TB_MISO_CLICKCOUNT"/>
+   
+  <!-- End Login Model 
+ Start Help Desk -->
+  <mapping class="com.models.Helpdesk.HD_TB_BISAG_TICKET_GENERATE"/>
+  <mapping class="com.models.Helpdesk.HD_TB_BISAG_USER_LOGIN_COUNT_INFO"/>
+  <mapping class="com.models.Helpdesk.HD_TB_BISAG_USER_INFO"/>
+  <mapping class="com.models.Helpdesk.HD_TB_BISAG_FAQ"/>
+  <mapping class="com.models.Helpdesk.HD_TB_BISAG_LOGIN_MARQUEE"/>
+  <!-- END Help Desk 
+ Start Orbat Model -->
+  <mapping class="com.models.Tbl_CodesForm"/>
+  <mapping class="com.models.Miso_Orbat_Unt_Dtl"/>
+  <mapping class="com.models.Tb_Miso_Orbat_Code"/>
+  <mapping class="com.models.Tb_Miso_Orabt_Arm_Code"/>
+  <mapping class="com.models.Miso_Orbat_Shdul_Detl"/>
+  <mapping class="com.models.Tb_Miso_Orbat_Sus_Dtl"/>
+  <mapping class="com.models.Miso_Orbat_Relief_Prgm"/>
+  <mapping class="com.models.T_Domain_Value"/>
+  <mapping class="com.models.Tb_Miso_Orbat_Line_Dte"/>
+  <mapping class="com.models.TB_MISO_ORBAT_COMD_CONT"/>
+  
+  <!-- <mapping class="com.models.Miso_orbat_all_details_view" /> 
+ END Orbat Model 
+ Start CUE Model -->
+ <mapping class="com.models.TB_LDAP_SCREEN_ANALYTICS"/>
+  <mapping class="com.models.CUE_TB_MISO_CES"/>
+  <mapping class="com.models.CUE_TB_MISO_MMS_ITEM_MSTR"/>
+  <!-- <mapping class="com.models.CUE_TB_MISO_MMS_MLCC_DETL"/>	  -->
+  <mapping class="com.models.CUE_TB_MISO_MMS_WET_PET_DET"/>
+  <mapping class="com.models.CUE_TB_MISO_MMS_WET_PET_MAST_DET"/>
+  <mapping class="com.models.CUE_TB_MISO_WEPE_PERS_DET"/>
+  <mapping class="com.models.CUE_TB_MISO_WEPE_PERS_FOOTNOTES"/>
+  <mapping class="com.models.CUE_TB_MISO_WEPE_PERS_MDFS"/>
+  <mapping class="com.models.CUE_TB_PSG_RANK_APP_MASTER"/>
+  <mapping class="com.models.CUE_TB_MISO_WEPE_TRANS_FOOTNOTES"/>
+  <mapping class="com.models.CUE_TB_MISO_WEPE_TRANSPORT_DET"/>
+  <mapping class="com.models.CUE_TB_MISO_WEPE_TRANSPORT_MDFS"/>
+  <mapping class="com.models.CUE_TB_MISO_WEPE_WEAPON_DET"/>
+  <mapping class="com.models.CUE_TB_MISO_WEPECONDITIONS"/>
+  <mapping class="com.models.CUE_TB_MISO_WEPE_WEAPONS_MDFS"/>
+  <mapping class="com.models.CUE_TB_MISO_WEPE_WEAPON_FOOTNOTES"/>
+  <mapping class="com.models.cue_wepe"/>
+  <mapping class="com.models.cue_wet_pet"/>
+  <mapping class="com.models.CUE_TB_MISO_PROVISION_MASTER"/>
+  <mapping class="com.models.CUE_TB_MISO_PROVISION_WEAPON_DET"/>
+  <mapping class="com.models.CUE_TB_MISO_PROVISION_WEAPON_FOOTNOTES"/>
+  <mapping class="com.models.CUE_TB_MISO_PROVISION_WEAPONS_MDFS"/>
+  <mapping class="com.models.CUE_TB_MISO_PROVISION_TRANSPORT_MASTER"/>
+  <mapping class="com.models.CUE_TB_MISO_PROVISION_TRANSPORT_DET"/>
+  <mapping class="com.models.CUE_TB_MISO_PROVISION_TRANSPORT_FOOTNOTES"/>
+  <mapping class="com.models.CUE_TB_MISO_PROVISION_TRANSPORT_MDFS"/>
+  <mapping class="com.models.CUE_TB_MISO_PRF_Mst"/>
+  <mapping class="com.models.CUE_GS_POOL"/>
+  <mapping class="com.models.UploadWetPetAamendmentToDocument"/>
+  <mapping class="com.models.UploadAamendmentToDocument"/>
+  
+  <!-- raj -->
+ <mapping class="com.models.CUE_TB_WEPE_link_sus_pershistory"/>
+ <mapping class="com.models.CUE_TB_WEPE_link_sus_transhistory"/>
+ <mapping class="com.models.CUE_TB_WEPE_link_sus_weaphistory"/>
+  
+   
+  <!-- <mapping class="com.models.cue_transport_ue" /> 
+ <mapping class="com.models.sus_weapon_wepe" /> 
+ <mapping class="com.models.sus_pers_stdauth" /> -->
+  <mapping class="com.models.sus_weapon_wepe_with_wetpet"/>
+  <mapping class="com.models.CUE_TB_WEPE_link_sus_perstransweapon"/>
+  <mapping class="com.models.CUE_TB_wepe_link_sus_pers_mdfs"/>
+  <mapping class="com.models.CUE_TB_WEPE_link_sus_pers_footnotes"/>
+  <mapping class="com.models.CUE_TB_WEPE_link_sus_trans_mdfs"/>
+  <mapping class="com.models.CUE_TB_WEPE_link_sus_trans_footnotes"/>
+  <mapping class="com.models.CUE_TB_WEPE_link_sus_weapon_mdfs"/>
+  <mapping class="com.models.CUE_TB_WEPE_link_sus_weapon_footnotes"/>
+  <!-- <mapping class="com.models.CUE_PROVISION_WEAPON_UNITSWISE" /> -->
+  <mapping class="com.models.CUE_TB_MISO_PROVISION_WET_EQUIP"/>
+  <mapping class="com.models.CUE_TB_MISO_CAPTURE_CRITITCAL_STORE"/>
+  <mapping class="com.models.CUE_TB_MISO_CAPTURE_SECOND_THIRD_LINE_TPT"/>
+  <!-- END CUE Model 
+ Start TMS Model -->
+ 
+  <mapping class="com.models.TB_TMS_REPAIR_AGENCY_MASTER"/>
+ <mapping class="com.models.TB_TMS_CHILD_GSTOSPL_CONVERT_REQ"/>
+   <mapping class="com.models.TB_TMS_BASE_WORKSHOP_MASTER" /> 
+  <mapping class="com.models.TB_TMS_MCT_MAIN_MASTER"/>
+  <mapping class="com.models.TB_TMS_MCT_NODAL_DIR_MASTER"/>
+  <mapping class="com.models.TB_TMS_MCT_REG_AGENCY_MASTER"/>
+  <mapping class="com.models.TB_TMS_MCT_SLOT_MASTER"/>
+  <mapping class="com.models.TB_TMS_MAKE_MASTER"/>
+  <mapping class="com.models.TB_TMS_MODEL_MASTER"/>
+  <mapping class="com.models.TB_TMS_MCT_MASTER"/>
+  <mapping class="com.models.TB_TMS_MVCR_PARTA_MAIN"/>
+  <mapping class="com.models.TB_TMS_MVCR_PARTA_DTL"/>
+  <mapping class="com.models.TB_TMS_BANUM_DIRCTRY"/>
+  <mapping class="com.models.UploadDocumentMVCR"/>
+  <mapping class="com.models.TB_TMS_CONVERT_REQ"/>
+  <mapping class="com.models.Tms_Banum_Req_Prnt"/>
+  <mapping class="com.models.Tms_Banum_Req_Child"/>
+  <mapping class="com.models.TB_TMS_RO_MAIN"/>
+  <mapping class="com.models.TB_TMS_RO_VEHICLE_DTLS"/>
+  <mapping class="com.models.TB_TMS_RIO_VEHICLE_DTLS"/>
+  <mapping class="com.models.TB_TMS_DRR_DIR_DTL"/>
+  <mapping class="com.models.TB_TMS_DRR_DIR_MAIN"/>
+  <mapping class="com.models.TB_TMS_RELIEF_PROG_HISTORY"/>
+  <mapping class="com.models.TB_TMS_RELIEF_PROG_HISTORY_C"/>
+  <mapping class="com.models.TB_TMS_RELIEF_PROG_HISTORY_A"/>
+  <mapping class="com.models.TB_TMS_UPLOAD_DOC_MCR"/>
+  <mapping class="com.models.TB_TMS_CENSUS_DRR_DIR_DTL"/>
+  <mapping class="com.models.TB_TMS_CENSUS_DRR_DIR_MAIN"/>
+  <mapping class="com.models.TB_TMS_CENSUS_RETURN"/>
+  <mapping class="com.models.TB_TMS_CENSUS_RETURN_MAIN"/>
+  <mapping class="com.models.TB_TMS_EMAR_DRR_DIR_DTL"/>
+  <mapping class="com.models.TB_TMS_EMAR_DRR_DIR_MAIN"/>
+  <mapping class="com.models.TB_TMS_EMAR_REPORT"/>
+  <mapping class="com.models.TB_TMS_EMAR_REPORT_MAIN"/>
+  <mapping class="com.models.TB_TMS_WORK_ORDER"/>
+    <mapping class="com.models.TB_LDAP_SCREEN_ANALYTICS"/>
+  <!-- <mapping class="com.models.TB_TMS_ASSEMBLY_MASTER"/> 
+ <mapping class="com.models.TB_TMS_CAT_PART"/> -->
+  <mapping class="com.models.Tms_animals_details"/>
+  <mapping class="com.models.TMS_TB_MISO_BREED_MASTER"/>
+  <mapping class="com.models.TMS_TB_MISO_SPLZ_MASTER"/>
+  <mapping class="com.models.TMS_TB_MISO_COLOR_MASTER"/>
+  <mapping class="com.models.TMS_TB_UE_MASTER"/>
+  <mapping class="com.models.TB_TMS_ANIMAL_HISTORY_DETAILS"/>
+  <mapping class="com.models.TB_TMS_TYPE_DOG"/>
+  <mapping class="com.models.TB_TMS_ANIMAL_FITNESS_STATUS"/>
+  <mapping class="com.models.TB_TMS_TYPE_OF_ANIMAL_MASTER"/>
+  <mapping class="com.models.TMS_TB_MISO_SOURCE_MASTER"/>
+  <mapping class="com.models.View_TMS_BVeh_Command_Wise_TrnsportUE_UH"/>
+  <mapping class="com.models.Prf_Wise_TrnsportUE_UH"/>
+  <mapping class="com.models.View_TMS_Bveh_Mvcr_Update_Status_Details"/>
+  <mapping class="com.models.View_Tms_BVEH_Unit_Wise_Issue_Type_UH"/>
+  <mapping class="com.models.MMS_TV_ADH_UNIT_STATUS"/>
+  <mapping class="com.models.View_TMS_Aveh_Mvcr_Update_Status_Details"/>
+  <mapping class="com.models.View_TMS_Cveh_Mvcr_Update_Status_Details"/>
+  <mapping class="com.models.TB_TMS_IUT"/>
+      <mapping class="com.models.UPLOAD_DOCUMENT_EMAR"/>
+<!--   26-01-1994 -->
+   <mapping class="com.models.TB_TMS_VEH_CAT_LINK" /> 
+     <mapping class="com.models.TB_TMS_CIN"/>
+  <!-- END TMS Model 
+ Start	MMS -->
+  <mapping class="com.models.Tb_Miso_Orbat_Unit_Other_Function"/>
+  <mapping class="com.models.MMS_TB_MLCCS_MSTR_DETL"/>
+  <mapping class="com.models.MMS_Domain_Values"/>
+  <mapping class="com.models.COUNTRY"/>
+  <mapping class="com.models.MMS_RO_Generation"/>
+  <mapping class="com.models.MMS_TB_REGN_MSTR_DETL"/>
+  <mapping class="com.models.MMS_TB_REGN_MSTR"/>
+  <mapping class="com.models.MMS_TB_MLCCS_NEW_REQ"/>
+  <!-- <mapping class="com.models.MMS_TB_TYPE_OF_HLDG" /> -->
+  <mapping class="com.models.Mms_tb_regn_oth_mstr"/>
+  <mapping class="com.models.MMS_RIO_Generation"/>
+  <mapping class="com.models.MMS_TB_DEPOT_REGN_MSTR_DETL"/>
+  <mapping class="com.models.MMS_TB_DEPOT_REGN_MSTR"/>
+  <mapping class="com.models.MMS_TB_OBSN_DETL"/>
+  <mapping class="com.models.MMS_TB_COMD_RO_MSTR"/>
+  <mapping class="com.models.MMS_TB_REGN_ENGR_MSTR"/>
+  <mapping class="com.models.MMS_TB_UNIT_UPLOAD_DOCUMENT"/>
+  <mapping class="com.models.MMS_TB_BARREL_CHILD_DTL"/>
+  <mapping class="com.models.MMS_TB_STRIP_INSP_RECOIL"/>
+  <mapping class="com.models.MMS_TB_OH_CHILD_DTL"/>
+  <!-- End MMS -->
+  <mapping class="com.models.TB_LDAP_MODULE_MASTER"/>
+  <mapping class="com.models.TB_LDAP_SCREEN_MASTER"/>
+  <mapping class="com.models.TB_LDAP_SUBMODULE_MASTER"/>
+  <mapping class="com.models.TB_LDAP_ROLE_TYPE"/>
+  <mapping class="com.models.TB_LDAP_ROLEMASTER"/>
+  <mapping class="com.models.TB_LDAP_SCREEN_ANALYTICS"/>
+    <mapping class="com.models.TB_TMS_EMAR_HISTORY_TABLE" /> 
+  <mapping class="com.models.UploadDocumentsFormation"/>
+  <!-- Start PSG UPLOAD -->
+  <mapping class="com.models.TB_PSG_UPLOAD"/>
+  <!-- END PSG UPLOAD --> 
+  
+<!--  it asset --> 
+			
+		<!-- MASTERS -->
+		<mapping class="com.models.itasset.master.TB_MSTR_RAM_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_TYPE_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_DPLY_ENV_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_HDD_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_OFFICE_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_OS_FIRMWARE_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_OS_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_PROCESSOR_TYPE_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_TYPE_OF_HW_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_UPS_CAPACITY_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_UPS_TYPE_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_YEAR_OF_MANUFACTURING_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_YEAR_OF_PROC_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_ASSET_M" />
+		
+		<mapping class="com.models.itasset.master.TB_MSTR_PERIPHERAL_TYPE_M" />
+		
+		<mapping class="com.models.itasset.master.TB_MASTER_MODEL" />
+		<mapping class="com.models.itasset.master.TB_MASTER_MAKE" />
+		<mapping class="com.models.itasset.master.TB_MSTR_ASSETS" />
+		<mapping class="com.models.itasset.master.TB_MSTR_ANTIVIRUS_M" />
+		<mapping class="com.models.itasset.master.TB_MASTER_BUDGET" />
+		<mapping class="com.models.itasset.master.TB_MSTR_CONNECTIVITY" />
+		<mapping class="com.models.itasset.master.TB_MSTR_HARDWARE_INTERFACE" />
+		<mapping class="com.models.itasset.master.TB_MSTR_ETHERNET_PORT" />
+		<mapping class="com.models.itasset.master.TB_MSTR_MANAGEMENT_LAYER" />
+		<mapping class="com.models.itasset.master.TB_MSTR_NETWORK_FEATURES" />
+		
+		
+		<mapping class="com.models.itasset.master.TB_MISO_ORBAT_LINE_DTE"/>
+
+		
+		<!-- MASTERS -->
+		<!-- ASSETS -->
+		<mapping class="com.models.assets.Assets_Main" />
+		<mapping class="com.models.assets.It_Asset_Peripherals" />
+		<mapping class="com.models.assets.It_Asset_Inter_Unit_Trnsf_Comp" />
+			<mapping class="com.models.assets.It_Asset_Inter_Unit_Trnsf_Perif" />
+		<!-- ASSETS -->
+		<mapping class="com.models.assets.TB_PERIPHERAL_CHILD" />
+			<mapping class="com.models.assets.Assets_Child" />
+			
+		<!-- START WORK ORDER -->
+			<mapping class="com.model.WorkOrder.TB_IT_ASSET_WORK_ORDER" />
+			<mapping class="com.model.WorkOrder.COMPUTING_WORK_ORDER_P" />
+			<mapping class="com.model.WorkOrder.COMPUTING_WORK_ORDER_C" />
+			<mapping class="com.model.WorkOrder.PERIPHERAL_WORK_ORDER_C" />
+		<!--  END  WORK ORDER -->
+
+	 	<!-- FP MIS MODULE START -->
+		<mapping class="com.models.fpmis.FP_MIS_Master_Model" />    
+		<mapping class="com.models.fpmis.fp_tb_pref_head_model" />
+		<mapping class="com.models.fpmis.fp_tb_pref_unit_model" />
+		<mapping class="com.models.fpmis.fp_tb_proj_detl_model" />
+		<mapping class="com.models.fpmis.fp_tb_norbat_dtl_model" />
+		<mapping class="com.models.fpmis.fp_tb_cda_detl20_model" />
+		<mapping class="com.models.fpmis.fp_tb_proj_detl_model" />
+		<mapping class="com.models.fpmis.fp_tb_admin_control_model" />
+		<mapping class="com.models.fpmis.fp_tb_advisory_model" />
+		<mapping class="com.models.fpmis.fp_tv_orbat_dtl_Model" />	
+		
+		<!-- FP MIS MODULE END -->
+
+		<!-- START MNH -->
+		<mapping class="com.models.mnh.Tb_Med_Daily_Surv_Disease_Mstr" />
+		<mapping class="com.models.mnh.Tb_Med_Disease_Cause" />
+		<mapping class="com.models.mnh.Tb_Med_Surv_Master" />
+		<mapping class="com.models.mnh.Tb_Med_RankCode" />
+		<mapping class="com.models.mnh.Tb_Med_System_Code" />
+		<mapping class="com.models.mnh.Tb_Med_Opd_Sp_Department" />
+		<mapping class="com.models.mnh.Tb_Med_Opd_Sp_Procedure_master" />
+		<mapping class="com.models.mnh.Tb_Med_Opd_Sp_Subprocedure" />
+		<mapping class="com.models.mnh.Tb_Med_Hosp_Assign" />
+		
+		<!-- START INPUT MNH -->
+		<mapping class="com.models.mnh.Med_OPD_Investigation_Model" />
+		<mapping class="com.models.mnh.Scrutiny_Search_Model" />
+		<mapping class="com.models.mnh.Tb_Med_Bed_Ex_Servicemen" />
+		<mapping class="com.models.mnh.Tb_Med_Bed_Serving" />
+		<mapping class="com.models.mnh.Tb_Med_Death" />
+		<mapping class="com.models.mnh.Tb_Med_HIV" />
+		<mapping class="com.models.mnh.Tb_Med_Imb" />
+		<mapping class="com.models.mnh.Tb_Med_Opd_Cases" />
+		<mapping class="com.models.mnh.TB_Med_Authorisation_All" />
+		<mapping class="com.models.mnh.Tb_Med_Strength" />
+		<!-- END INPUT MNH -->
+		
+		<!-- MNH NEW DGMS INPUT  -->
+		<mapping class="com.models.mnh.Tb_Med_Daily_Bed_Occupancy"/>
+		<mapping class="com.models.mnh.Tb_Med_Daily_Disease_Surv_Details" />
+		<mapping class="com.models.mnh.Tb_Med_Daily_Hosp_Adm_Amc" />
+		<mapping class="com.models.mnh.Tb_Med_Unusual_Occurrence"/>
+		<mapping class="com.models.mnh.Tb_Med_Daily_Hosp_Adm_Off_Vip" />
+		<!-- MNH NEW DGMS INPUT  -->
+		
+		<!-- SHO FHO -->
+		<mapping class="com.models.mnh.Tb_Med_Eir" />
+		<mapping class="com.models.mnh.Tb_Med_History_Stay" />
+		<mapping class="com.models.mnh.Tb_Med_Surv_Master" />
+		<mapping class="com.models.mnh.Tb_Med_Serv_Data" />
+		<mapping class="com.models.mnh.Tb_Med_Pr_Preventive_Details" />
+        <mapping class="com.models.mnh.Tb_Med_Ch_Malaria" />
+		<mapping class="com.models.mnh.Tb_Med_Ch_STD" />
+		<mapping class="com.models.mnh.Tb_Med_Ch_Viral_Hepatitis" />
+		<mapping class="com.models.mnh.Tb_Med_Ch_h1n1_influenza" />
+		<mapping class="com.models.mnh.Tb_Med_Ch_injuries_nea" />
+		<mapping class="com.models.mnh.Tb_Med_Ch_pulmonary_tuberculosis" />
+		<mapping class="com.models.mnh.Tb_Med_Ch_milk_quality" />
+		<mapping class="com.models.mnh.Tb_Med_Ch_health_education" />
+		<mapping class="com.models.mnh.Tb_Med_Ch_workshops" />
+		<mapping class="com.models.mnh.Tb_Med_List_of_close_contacts" />
+		<mapping class="com.models.mnh.Tb_Med_Food_Master" /> 
+        <mapping class="com.models.TB_TMS_MCT_DISCARD_CON"/>
+        <mapping class="com.models.TB_TMS_MCT_MAIN_OH_MR"/>
+        <mapping class="com.models.TB_TMS_FMCR_HISTORY_TABLE"/>
+		<mapping class="com.models.mnh.Tb_Med_food_history" />
+		<!-- END SHO FHO -->
+		
+		<!-- UPLOAD -->
+		<mapping class="com.models.mnh.File_Upload_Model" />
+		<mapping class="com.models.mnh.Tb_Med_BedOccupancy" />
+		<mapping class="com.models.mnh.Tb_Med_Str_Unit" />
+		<!-- END UPLOAD -->
+		
+		<!-- DASHBOARD  -->
+		<!-- <mapping class="com.models.mnh.Med_principle_dis" />
+		<mapping class="com.models.mnh.Medical_Cmd_Corp_Disease_Details_View" /> -->
+		<!-- DASHBOARD  -->
+	
+	<!-- END MNH -->
+	
+	
+	
+	
+<!--  it asset -->
+			
+		<!-- MASTERS -->
+		<mapping class="com.models.itasset.master.TB_MSTR_RAM_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_TYPE_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_DPLY_ENV_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_HDD_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_OFFICE_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_OS_FIRMWARE_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_OS_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_PROCESSOR_TYPE_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_TYPE_OF_HW_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_UPS_CAPACITY_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_UPS_TYPE_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_YEAR_OF_MANUFACTURING_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_YEAR_OF_PROC_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_ASSET_M" />
+		<mapping class="com.models.itasset.master.TB_MSTR_PERIPHERAL_TYPE_M" />
+		<mapping class="com.models.itasset.master.TB_MASTER_MODEL" />
+		<mapping class="com.models.itasset.master.TB_MASTER_MAKE" />
+		<mapping class="com.models.itasset.master.TB_MSTR_ASSETS" />
+		<mapping class="com.models.itasset.master.TB_MSTR_ANTIVIRUS_M" />
+		<mapping class="com.models.itasset.master.TB_MASTER_BUDGET" />
+		<mapping class="com.models.itasset.master.TB_MSTR_CONNECTIVITY" />
+		<mapping class="com.models.itasset.master.TB_MSTR_HARDWARE_INTERFACE" />
+		<mapping class="com.models.itasset.master.TB_MSTR_ETHERNET_PORT" />
+		<mapping class="com.models.itasset.master.TB_MSTR_MANAGEMENT_LAYER" />
+		<mapping class="com.models.itasset.master.TB_MSTR_NETWORK_FEATURES" />
+		<mapping class="com.models.itasset.master.TB_MISO_ORBAT_LINE_DTE"/>
+		
+		
+		<!-- Start PSG Master -->
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_CASUALITY1"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_CASUALITY2"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_CASUALITY3"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_COPECODE"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_BPET_RESULT"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_BPET_QT"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_FIRING_RESULT"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_FIRING_QT"/>
+  <mapping class="com.models.psg.Master.TB_EXAMINATION_PASSED"/>
+  <mapping class="com.models.psg.Master.TB_EYE_COLOUR"/>
+  <mapping class="com.models.psg.Master.TB_MEDAL_TYPE"/>
+  <mapping class="com.models.psg.Master.TB_RELATION"/>
+  <mapping class="com.models.psg.Master.TB_BANK"/>
+  <mapping class="com.models.psg.Master.TB_COURSE_TYPE"/>
+  <mapping class="com.models.psg.Master.TB_PERSONNEL_TYPE"/>
+  <mapping class="com.models.psg.Master.TB_GENDER"/>
+  <mapping class="com.models.psg.Master.TB_BLOOD_GROUP"/>
+  <mapping class="com.models.psg.Master.TB_CITY"/>
+  <mapping class="com.models.psg.Master.TB_COMMISSION_TYPE"/>
+  <mapping class="com.models.psg.Master.TB_DISTRICT"/>
+  <mapping class="com.models.psg.Master.TB_MARITAL_STATUS"/>
+  <mapping class="com.models.psg.Master.TB_NATIONALITY"/>
+  <mapping class="com.models.psg.Master.TB_RELIGION"/>
+  <mapping class="com.models.psg.Master.TB_STATE"/>
+  <mapping class="com.models.psg.Master.TB_SPECIALIZATION"/>
+  <mapping class="com.models.psg.Master.TB_LINK_DEGREE"/>
+  <mapping class="com.models.psg.Master.TB_DEGREE"/>
+  <mapping class="com.models.psg.Master.TB_COUNTRY"/>
+  <mapping class="com.models.psg.Master.TB_TYPE_OF_EMPLOYMENT"/>
+  <mapping class="com.models.psg.Master.TB_HAIR_COLOUR"/>
+  <mapping class="com.models.psg.Master.TB_INSTITUTE"/>
+  <mapping class="com.models.psg.Master.TB_LANGUAGE"/>
+  <mapping class="com.models.psg.Master.TB_PRE_CADET_STATUS"/>
+  <mapping class="com.models.psg.Master.TB_NCC_TYPE_ENTRY"/>
+  <mapping class="com.models.psg.Master.TB_LANG_STD"/>
+  <mapping class="com.models.psg.Master.TB_LANG_PROOF"/>
+  <mapping class="com.models.psg.Master.TB_QUALIFICATION"/>
+  <mapping class="com.models.psg.Master.TB_DIV_GRADE"/>
+  <mapping class="com.models.psg.Master.TB_Height"/>
+  <mapping class="com.models.psg.Master.TB_MOTHERTOUNGE"/>
+  <mapping class="com.models.psg.Master.TB_MED_CAT_VALUES"/>
+  <mapping class="com.models.psg.Master.TB_INDIAN_LANGUAGE"/>
+  <mapping class="com.models.psg.Master.TB_FOREIGN_LANGUAGE"/>
+  <mapping class="com.models.psg.Master.TB_PROFESSION"/>
+  <mapping class="com.models.psg.Master.TB_FOREIGN_LANGUAGE"/>
+  <mapping class="com.models.psg.Master.TB_INDIAN_LANGUAGE"/>
+  <mapping class="com.models.psg.Master.TB_OPERATION"/>
+  <mapping class="com.models.psg.Master.TB_PLATOON"/>
+  <mapping class="com.models.psg.Master.TB_BATTALION"/>
+  <mapping class="com.models.psg.Master.TB_COMPANY"/>
+  <mapping class="com.models.psg.Master.TB_INSTITUTE_LIST"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_PURPOSEOF_VISIT"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_AWARD_CAT"/>
+  <mapping class="com.models.psg.Master.TB_MSTR_PROMOTIONAL_EXAM"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_SECONDED_TO"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_FIELD_AREA"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_COMBINATION_OF_ALLCEA"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_COURSE_INSTITUTE"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_CIVILIAN_TRADE"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_CIVILIAN_DESIGNATION"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_CAUSE_OF_NON_EFFECTIVE"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_DISC_TRIALED"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_ARMY_ACT_SEC"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_SUB_CLAUSE"/>
+  <!--  END PSG Master --> 
+		
+		
+		<!-- Start Civilian Master  -->
+  <mapping class="com.models.psg.Civilian_Master.TB_PSG_MSTR_CADRE_CIVILIAN"/>
+  <mapping class="com.models.psg.Civilian_Master.TB_PSG_MSTR_CAUSE_OF_NON_EFFECTIVE_CIVILIAN"/>
+  <mapping class="com.models.psg.Civilian_Master.TB_CATEGORY"/>
+  <mapping class="com.models.psg.Civilian_Master.TB_DISABILITY"/>
+  <mapping class="com.models.psg.Civilian_Master.TB_PSG_MSTR_PAY_LEVEL"/>
+  <mapping class="com.models.psg.Civilian_Master.TB_PAY_HEAD"/>
+  <mapping class="com.models.psg.Civilian_Master.TB_EX_SERVICEMEN"/>
+    <mapping class="com.models.psg.Master.TB_PSG_MSTR_CIVILIAN_TRADE"/>
+  <mapping class="com.models.psg.Master.TB_PSG_MSTR_CIVILIAN_DESIGNATION"/>
+  <!-- End Civilian Master 
+ Start Civilian -->
+  <mapping class="com.models.psg.Civilian.TB_CIVILIAN_DETAILS"/>
+  <mapping class="com.models.psg.Civilian.TB_POSTING_IN_OUT_CIVILIAN"/>
+  <mapping class="com.models.psg.Civilian.TB_CIVILIAN_MAIN"/>
+  <!--  End Civilian --> 
+  
+  
+  
+ 
+  <!-- START JCO MASTER -->
+  <mapping class="com.model.Jco_Master.TB_PSG_MSTR_CLASS_PAY_JCO"/>
+  <mapping class="com.model.Jco_Master.TB_PSG_MSTR_RECORD_OFFICE_JCO"/>
+  <mapping class="com.model.Jco_Master.TB_PSG_MSTR_PAY_GROUP_JCO"/>
+  <mapping class="com.model.Jco_Master.TB_PSG_MSTR_CLASS_JCO"/>
+  <mapping class="com.model.Jco_Master.TB_PSG_MSTR_TRADE_JCO"/>
+  <mapping class="com.model.Jco_Master.TB_PSG_MSTR_RANK_JCO"/>
+  <mapping class="com.model.Jco_Master.TB_MSTR_PROMOTIONAL_EXAM_JCO"/>
+  <mapping class="com.model.Jco_Master.TB_PSG_MSTR_APPOINTMENT_JCO"/>
+  <mapping class="com.model.Jco_Master.TB_PSG_MSTR_CAUSE_OF_NON_EFFECTIVE_JCO"/>
+  <mapping class="com.model.Jco_Master.TB_PSG_MSTR_GORKHA_DOMISILE_JCO"/>
+  <mapping class="com.model.Jco_Master.TB_Type_Of_Post"/>
+  <!--  
+ START PSG JCO TRANSACTION -->
+  <mapping class="com.models.psg.Jco_Transaction.TB_POSTING_IN_OUT_JCO"/>
+  <mapping class="com.models.psg.Jco_Transaction.TB_RE_CALL"/>
+  <mapping class="com.models.psg.Jco_Transaction.TB_PSG_MARITAL_DISCORD_JCO"/>
+  <mapping class="com.models.psg.Jco_Transaction.TB_PSG_MARITAL_DISCORD_STATUS_CHILD_JCO"/>
+  <mapping class="com.models.psg.Jco_Census.TB_CENSUS_JCO_OR_SIBLINGS"/>
+  <mapping class="com.models.psg.Jco_Census.TB_CENSUS_JCO_OR_PARENT"/>
+  <mapping class="com.models.psg.Jco_Transaction.TB_PSG_MISO_ROLE_HDR_STATUS_JCO"/>
+  <mapping class="com.models.psg.Jco_Transaction.TB_FIELD_SERVICE_CH_JCO"/>
+  <mapping class="com.models.psg.Jco_Transaction.TB_FIELD_SERVICE_P_JCO"/>
+  <mapping class="com.models.psg.Jco_Census.TB_CENSUS_JCO_OR_PARENT_HISTORY"/>
+  <mapping class="com.models.psg.Jco_Transaction.TB_PSG_CERTIFY_BC_PC_JCO"/>
+  <!-- END 
+ START PSG JCO UPDATE CENSUS DATA -->
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_ALLERGIC_TO_MEDICINE_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CANTEEN_CARD_DETAILS1_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_ADDRESS_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_ARMY_COURSE_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_AWARDSNMEDAL_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_BATTLE_PHYSICAL_CASUALITY_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_CHILDREN_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_CONTACT_CDA_ACCOUNT_DETAILS_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_DISCIPLINE_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_FAMILY_MARRIED_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_FIRING_STANDARD_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_FOREIGN_COUNTRY_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_LANGUAGE_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_PROMO_EXAM_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_QUALIFICATION_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CHANGE_NAME_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CHANGE_OF_APPOINTMENT_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CHANGE_OF_RANK_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_DESERTER_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_IDENTITY_CARD_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_INTER_ARM_TRANSFER_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_MEDICAL_CATEGORY_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_NOK_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_NON_EFFECTIVE_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_BPET_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CHANGE_RELIGION_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CENSUS_SPOUSE_QUALIFICATION_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CHANGE_ARMY_NO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CHANGE_IN_CLASS_PAY_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CHANGE_IN_DATE_OF_SENIORITY_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CHANGE_IN_PAY_GROUP_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CHANGE_IN_TRADE_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_MEDICAL_CATEGORY_HISTORY_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_ATTACHMENT_DETAILS_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CHANGE_TYPE_OF_POSTING_JCO"/>
+  <!--  
+ PSG JCO Update CENSUS  
+ Start Update Census JCO  -->
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_BIRTH_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_GENDER_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_AADHARNO_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_ADDRESS_OF_BIRTH_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_BLOODGROUP_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_CLASS_OF_ENROL_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_CLASS_OF_RANK_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_DT_OF_ATTESTATION_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_ENROLMENT_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_FAMILY_DETAILS_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_HEIGHT_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_MOTHER_TOUNGE_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_NATIONALITY_JCO"/>
+  <mapping class="com.models.psg.Jco_Update_Census.TB_PSG_UPDATE_CENSUS_PAN_NO_JCO"/>
+  <!--   End Update Census JCO -->  
+  
+<!-- 	 Start PSG TRANSACTION --> 
+ <mapping class="com.models.psg.Transaction.TB_PSG_MISO_ROLE_HDR_STATUS"/>
+  <mapping class="com.models.psg.Transaction.TB_TRANS_PROPOSED_COMM_LETTER_HISTORY"/>
+  <mapping class="com.models.psg.Transaction.TB_TRANS_PROPOSED_COMM_LETTER"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_CADET"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_DETAIL_Parent"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_ADDRESS"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_LANGUAGE"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_FOREIGN_COUNTRY"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_QUALIFICATION"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_SPOUSE_QUALIFICATION"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_FAMILY_DIVORCE"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_FAMILY_MRG"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_NCC_EXP"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_MEDICAL_CATEGORY"/>
+  <mapping class="com.models.psg.Transaction.TB_MEDICAL_CATEGORY_HISTORY"/>
+  <mapping class="com.models.psg.Transaction.TB_POSTING_IN_OUT"/>
+  <mapping class="com.models.psg.Transaction.TB_PSG_CENSUS_SUBJECT"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_EXAM_PASS"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_NOK"/>
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_IDENTITY_CARD"/>
+  <mapping class="com.models.psg.Transaction.TB_PSG_CENSUS_ALLERGICTOMEDICINE"/>
+  <mapping class="com.models.psg.Transaction.TB_FIELD_SERVICE_P"/>
+  <mapping class="com.models.psg.Transaction.TB_FIELD_SERVICE_CH"/>
+  <mapping class="com.models.psg.update_census_data.TB_CDA_ACC_NO"/>
+  <mapping class="com.models.psg.update_census_data.TB_CENSUS_DISCIPLINE"/>
+  <mapping class="com.models.psg.Transaction.TB_MARITIAL_DISCORD"/>
+  <mapping class="com.models.psg.Transaction.TB_LINK_APPOINMENT_WITH_SUPER_SUPERNUMERAY"/>
+  <mapping class="com.models.psg.Transaction.TB_PSG_UPDATE_COMM_CADET"/>
+  <mapping class="com.models.psg.Transaction.TB_PSG_UPDATE_COMM_COURSE"/>
+  <mapping class="com.models.psg.Transaction.TB_PSG_UPDATE_COMM_COMMISSION"/>
+  <mapping class="com.models.psg.Transaction.TB_PSG_UPDATE_COMM_GENDER"/>
+  <mapping class="com.models.psg.Transaction.TB_PSG_UPDATE_COMM_UNIT"/>
+  <mapping class="com.models.psg.Transaction.TB_PSG_UPDATE_COMM_BIRTH"/>
+  <mapping class="com.models.psg.Transaction.TB_PSG_DECLARED_BA_CA"/>
+  <mapping class="com.models.psg.update_census_data.TB_PSG_CHANGE_OF_SENIORITY"/>
+  <!-- End PSG TRANSACTION UPDATE OFFR DATA -->
+  <mapping class="com.models.psg.Transaction.TB_CENSUS_FAMILY_SIBLINGS"/>
+  <mapping class="com.models.psg.update_census_data.TB_CENSUS_SECONDMENT"/>
+  <mapping class="com.models.psg.update_census_data.TB_REEMPLOYMENT"/>
+  <mapping class="com.models.psg.update_census_data.TB_NON_EFFECTIVE"/>
+  <mapping class="com.models.psg.update_census_data.TB_CHANGE_RELIGION"/>
+  <mapping class="com.models.psg.update_census_data.TB_CHANGE_NAME"/>
+  <mapping class="com.models.psg.update_census_data.TB_CHANGE_OF_RANK"/>
+  <mapping class="com.models.psg.update_census_data.TB_CENSUS_AWARDSNMEDAL"/>
+  <mapping class="com.models.psg.update_census_data.TB_PSG_EXTENSION_OF_COMISSION"/>
+  <mapping class="com.models.psg.update_census_data.TB_PSG_CHANGE_OF_COMISSION"/>
+  <mapping class="com.models.psg.update_census_data.TB_INTER_ARM_TRANSFER"/>
+  <mapping class="com.models.psg.update_census_data.TB_CENSUS_CDA_ACCOUNT_NO"/>
+  <mapping class="com.models.psg.update_census_data.TB_CHANGE_OF_APPOINTMENT"/>
+  <mapping class="com.models.psg.update_census_data.TB_CENSUS_FIRING_STANDARD"/>
+  <mapping class="com.models.psg.update_census_data.TB_CENSUS_BPET"/>
+  <mapping class="com.models.psg.update_census_data.TB_FORIGEN_COUNTRY"/>
+  <mapping class="com.models.psg.update_census_data.TB_CENSUS_BATT_PHY_CASUALITY"/>
+  <mapping class="com.models.psg.update_census_data.TB_CENSUS_ARMY_COURSE"/>
+  <mapping class="com.models.psg.update_census_data.TB_CENSUS_PROMOTIONAL_EXAM"/>
+  <mapping class="com.models.psg.update_census_data.TB_REEMP_EXTENTION"/>
+  <mapping class="com.models.psg.Master.TB_COURSE"/>
+  <mapping class="com.models.psg.update_census_data.TB_CENSUS_CHILDREN"/>
+  <mapping class="com.models.psg.update_census_data.TB_DESERTER"/>
+  <!-- END UPDATE OFFR DATA 
+ Start Report 3008 and 3009-->
+  <mapping class="com.models.psg.Report.TB_PSG_IAFF_3008_MAIN_DETAILS"/>
+  <mapping class="com.models.psg.Report.TB_PSG_IAFF_3008_MAIN"/>
+  <mapping class="com.models.psg.Report.TB_PSG_IAFF_3009_MAIN"/>
+  <mapping class="com.models.psg.Report.TB_PSG_IAFF_3009_MAIN_DETAILS"/>
+  <mapping class="com.models.psg.Report.TB_IAFF_3009_MAIN"/>
+  <!-- End Report 3008 -->
+  <mapping class="com.models.psg.Transaction.TB_PSG_CANTEEN_CARD_DETAIL1"/>
+  <mapping class="com.models.psg.Transaction.TB_Maritial_Discord_Status_Child"/>
+  <!-- dev 17-12-24 -->
+  <mapping class="com.models.assets.Audit_Upload" />
+  
+  
+  	
+  <mapping class="com.models.psg.Master.TB_PSG_AGENCY_MASTER" /> 
+	<mapping class="com.models.psg.Master.TB_PSG_BENEFITS_MASTER" />
+	<mapping class="com.models.Emoluments.TB_PSG_EMOLUMENT_PARENT_OFFCR" /> 
+		<mapping class="com.models.Emoluments.TB_PSG_EMOLUMENT_CHILD_OFFCR" />  
+  
+  
+  
+   <mapping class="com.models.Emoluments_Jco.TB_PSG_EMOLUMENT_CHILD_OFFCR_JCO" />  
+    <mapping class="com.models.Emoluments_Jco.TB_PSG_EMOLUMENT_PARENT_OFFCR_JCO" /> 
+    
+    
+<!--     bisag v2 250822  (notification) -->
+ <mapping class="com.models.notification.TB_NOTIFICATION" /> 
+  <mapping class="com.models.psg.update_census_data.TB_CHANGE_TA_STATUS" /> 
+  <mapping class="com.models.psg.Jco_Update_JcoData.TB_CHANGE_TA_STATUS_JCO" />
+  <mapping class="com.models.psg.Report.TB_PSG_CIV_MAIN"/>
+    <mapping class="com.models.psg.Report.TB_PSG_CIV_MAIN_DETAILS"/>
+     <mapping class="com.models.TB_TMS_IUT_TRACK_STATUS_UPLOAD_VOUCHER"/>
+      <mapping class="com.models.MMS_TB_IMP_DRR_NEWFORMATE"/>
+
+ <mapping class="com.models.TB_TMS_PLANNING_OF_OH"/>
+
+          <mapping class="com.models.MMS_TB_IMP_DIR_NEWFORMATE"/>
+	     <mapping class="com.model.psg.xml.XML_FILE_UPLOAD"/>
+         <mapping class="com.model.psg.xml.XML_CASUALTY_DETAILS"/>
+         <mapping class="com.models.TB_TMS_MVCR_PARTA_DTL_HISTORY"/>
+         <mapping class="com.models.MMS_TB_CHILD_REGN_MSTR_DETL"/>
+         <mapping class="com.models.MMS_TB_RO_GENERATE_DTL"/>
+          <mapping class="com.models.MMS_TB_TEMPREGN_ROWISE_DTL"/>
+          
+<!-- Start Report MNS 3008 -->
+
+  <mapping class="com.models.psg.Report.TB_PSG_IAFF_3008_MAIN_MNS"/>
+  <mapping class="com.models.psg.Report.TB_PSG_IAFF_3008_MAIN_DETAILS_MNS"/>
+  <mapping class="com.models.psg.update_census_data.TB_CHANGE_TNAI_NO" />
+  <mapping class="com.models.psg.Transaction.TB_PSG_MARRIED_3008MNS_DTL"/>
+  
+<!-- End Report 3008 -->
+          
+          
+          <mapping class="com.models.psg.Transaction.TB_TREEPLANTAION"/>
+          
+          <!-- dev 18-12-24 -->
+          <mapping class="com.models.assets.AssetsDeleted" />
+          <mapping class="com.models.assets.PeripheralsDeleted" />
+          
+          <!-- psg p1 v2  -->
+		  <mapping class="com.models.psg.Report.TB_PSG_APPX_A_B_CIV_MAIN"/>
+		          
+		  <!-- IT Assets Personnel  -->     
+		  <mapping class="com.models.assets.TB_IT_ASSET_GENR_SANCTION_FORM" />
+		  <mapping class="com.models.assets.TB_IT_ASEET_PERSONAL_UPLOAD" />
+		  <mapping class="com.models.assets.TB_IT_ASSET_TYPEWISE_ROLE_MASTER" />
+		  
+		  
+		   <!-- CUE VETTING  -->
+		  <mapping class="com.models.CUE_TB_MISO_VETTING_DET"/>
+		  
+		  <!-- AVATION ADDED BY MITESH  -->
+<mapping class="com.models.TB_AVIATION_ACT_SLOT_MASTER" />
+	<mapping class="com.models.TB_AVIATION_MAKE_MASTER" />
+	<mapping class="com.models.TB_AVIATION_ACT_MAIN_MASTER" />
+	<mapping class="com.models.TB_AVIATION_RPAS_ACT_MASTER" />
+	<mapping class="com.models.TB_AVIATION_ACT_MASTER" />
+	<mapping class="com.models.TB_AVIATION_DAILY_BASIS" />
+	<mapping class="com.models.TB_AVIATION_DAILY_BASIS_HISTORY" />
+	<mapping class="com.models.TB_AVIATION_TAILNO_DTL" />
+	<mapping class="com.models.TB_AVIATION_RPAS_TAILNO_DTL" />
+	<mapping class="com.models.TB_AVIATION_CHTL_TAILNO_DTL" />
+	<mapping class="com.models.TB_AVIATION_CHTL_DAILY_BASIS" />
+	<mapping
+		class="com.models.TB_AVIATION_CHTL_DAILY_BASIS_HISTORY" />
+	<mapping class="com.models.TB_AVIATION_RPAS_DAILY_BASIS" />
+	<mapping
+		class="com.models.TB_AVIATION_RPAS_DAILY_BASIS_HISTORY" />
+	<mapping class="com.models.TB_AVIATION_UPLOAD_DOC_DACR" />
+	<mapping class="com.models.TB_MISO_MSTR_COUNTRY" />
+	<mapping class="com.models.TB_AVIATION_ROHAGENCY_MASTER" />
+	<mapping class="com.models.TB_AVIATION_DRR_DTL" />
+	
+	
+	<!-- ANIMAL  -->
+	
+	<mapping class="com.models.TMS_TB_MISO_ANIMAL_HOSPITAL_MASTER" />
+	<mapping class="com.models.TMS_TB_MISO_VACCINE_MASTER"/>
+	<mapping class="com.models.TMS_TB_MISO_EMPLOYMENT_MASTER"/>
+	<mapping class="com.models.TB_ANIMALS_AWARD_MASTER" />
+	
+	<mapping class="com.model.Animal.TB_ANIMAL_CENSUS_DTLS" />
+	<mapping class="com.model.Animal.TB_ANIMAL_ADCR_DTLS_HISTORY" />
+	  	<mapping class="com.model.Animal.TB_ANIMAL_EMPLOYMENT_HISTORY" />
+	  	<mapping class="com.model.Animal.TB_ANIMAL_UTILIZATION_HISTORY" />
+	  	<mapping class="com.model.Animal.TB_ANIMAL_HOSP_HISTORY" />
+	  	<mapping class="com.model.Animal.TB_ANIMAL_VACCINATION_HISTORY" />
+	  	<mapping class="com.model.Animal.TB_ANIMAL_TRAINING_HISTORY" />
+	  	<mapping class="com.model.Animal.TB_ANIMAL_DRUG_HISTORY" />
+	  	<mapping class="com.model.Animal.TB_ANIMAL_AWARD_HISTORY" />
+	<mapping class="com.model.Animal.TB_ANIMAL_STR_INCR_DECR" />
+	
+	
+	<!--HTO  -->
+	<mapping class="com.models.HTO.TB_ORBAT_OC_VOUCHER"/>
+	<mapping class="com.models.HTO.TB_ORBAT_HTO_USER"/>
+	
+	
+	<!--INSP -->
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_RPT_CLASSIFICATION_RANGES" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_UP_GRADATION_REPORT" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_EDUCATION_STANDARDS" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_OUTSTANDING_RENT_ALLIED" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_TRAINING_AMMUNITION" />
+		<mapping
+			class="com.model.InspectionReports.TB_PSG_ANNUAL_REPORT" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_UPGRADATION" />
+		<mapping class="com.model.InspectionReports.TB_DETAIL_COURSES" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_COURSES_CAT_A_B" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_DEFI_EQUP_EFFI" />
+		<mapping class="com.model.InspectionReports.TB_INSP_FFRS" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_OUTSTANDING_AUDIT" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_FINANCIAL_GRANTS" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_ESTABLISHMENT" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_EQUP_ANNUAL_METERAGE" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_ANIMAL" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_DTL_OF_EQUP_OFFROAD" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_REG_LANG_EXAM" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_PPT_RESULT" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_PPT_RESULT" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_PROMOTION_EXAM" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_TRAINING_AMMUNITION" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_SUMMARY_TECH_OTHER" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_SUMMARY_TECH" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_OUTSTANDING_LOSS_MT" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_FATAL_INCIDENTS" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_SECURITY_LAPSES" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_OUTSIDE_ATTACHMENTS" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_STANDARDS_ACHIEVED" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_TD_PROCEEDED" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_SOCIAL_MEDIA_LAPSES" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_PIO_CALL_LAPSES" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_ESPIONAGE_LAPSES" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_CELL_PHONE_LAPSES" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_WT_RESULT_OFF_JCO_OR" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_WT_RESULT_OTHER" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_FS_SECURITY_LAPSES" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_LOST_CDS_DVDS" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_LOST_ID_ECR" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_STATE_FUNDS" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_MAIN_TBL" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_BPET_RESULT" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_USER_REMARKS" />
+		<mapping class="com.model.InspectionReports.TB_MISO_INSP_LAND" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_DTL_OR_REQ_TRAINING" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_DTL_DEFFI_EXP_RESP_TO_TRAINNING" />
+		<mapping
+			class="com.model.InspectionReports.TB_MISO_INSP_EMP_OF_UNIT_DURING_PERIOD" />
+		<mapping
+			class="com.model.InspectionReports.TB_INSP_REGT_FUNDS" />
+	
+	
+		          <!-- 	PHASE II -->
+	<mapping
+	class="com.model.InspectionReports.TB_MISO_INSP_MAIN_PHASE_II_TBL" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_USER_REMARKS_PHASE_II" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_OP_PREPAREDNESS" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_PHASEII_TBL" />
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_STATEOFWEAPONS_EQU" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_CRITICAL_DEFI_MANPOWER" />
+
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_DISCIPLINE_COURTMARITAL_SUMMARYDISPOSAL" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_COMMENTS_ON_PARTII" />
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_MAIN_PHASE_III_TBL" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_STR_CHALLENGES" />
+
+
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_INDIVIDUAL_TRAINING" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_COLLECTIVE_TRAINING" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_MANAGEMENT_TRAINING" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_PERSONNEL_MANAGEMENT" />
+
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_INTERIOR_ECONOMY" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_MORALE_MOTIVATION" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_MATERIAL_MANAGEMENT" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_OTHER_MISCELLANEOUS_ASPECTS" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_ARMY_CORE_VALUES" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_HUMAN_RESOURCE_DEVELOPEMENT" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_ADDITIONAL_INFORMATION" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_COMMENTS_INSP_OFFR_PART_II" />
+
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_COMMENTS_ON_PARTII" />
+	<mapping
+		class="com.model.InspectionReports.TB_MISO_INSP_MAIN_PHASE_III_TBL" />
+		
+		<!-- 			PHASE 4 		-->
+<mapping
+class="com.model.InspectionReports.TB_MISO_INSP_MAIN_PHASE_IV_TBL" />
+
+<mapping
+class="com.model.InspectionReports.TB_MISO_FITNESS_FOR_WAR_OR_DESIGNATED_ROLE" />
+
+<mapping
+class="com.model.InspectionReports.TB_MISO_FITNESS_FOR_WAR_OR_DESIGNATED_ROLE_UNIT" />
+
+<mapping
+class="com.model.InspectionReports.TB_MISO_FITNESS_FOR_WAR_OR_DESIGNATED_ROLE_CRITICAL_ISSUES" />
+		
+		
+		
+		
+
+	</session-factory>
+</hibernate-configuration>

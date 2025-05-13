@@ -1,0 +1,19 @@
+general_que      about advance approval authorize balance cancel central certain certificate change collect come concept concern consider contact count curfew cut conditional copy day days did not didn't do not don't due to duration duty early el pl cl eligible extension extra handover holiday hospital injury know leave lock down maternity medical meet need not office ot overtime parent predefine print process proof reflected reject rejected require salary sick situation state take time together uncertain vacation verified verify without question personnel personal reason health education social leave type want
+recognize        a b c d e f g h i j k l m n o p q r s t u v w x y z
+error            404 405 500 page not found error issue working
+greeting         hi hello good morning afternoon
+insert           insert save saving store
+update           edit update change modify
+delete           delete drop remove
+ticket           ticket generate raise
+PerformanceEva   performance evalution team leader
+faq              faq chat
+master           master
+empwork          work activity
+resignation      resign resignation
+role             role
+transfer         transfer
+leave            leave
+apprv            approve
+reject           reject cancel
+search           search

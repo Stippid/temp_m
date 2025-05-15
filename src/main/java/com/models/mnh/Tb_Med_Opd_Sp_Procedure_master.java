@@ -1,0 +1,111 @@
+package com.models.mnh;
+
+import static javax.persistence.GenerationType.IDENTITY;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+
+@Entity
+@Table(name = "tb_med_opd_sp_procedure", uniqueConstraints = {
+		@UniqueConstraint(columnNames = "id")})
+public class Tb_Med_Opd_Sp_Procedure_master {
+	
+	private int id;
+	//private int dept_id;
+	private String proc_name;
+	private String status;
+	private Date created_on;
+	private String created_by;
+	private Date modified_on;
+	private String modified_by;
+	
+  	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "id", unique = true, nullable = false)
+  	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	/*public int getDept_id() {
+		return dept_id;
+	}
+	public void setDept_id(int dept_id) {
+		this.dept_id = dept_id;
+	}*/
+	@Column(length = 100)
+	public String getProc_name() {
+		return proc_name;
+	}
+	public void setProc_name(String proc_name) {
+		this.proc_name = proc_name;
+	}
+	@Column(length = 20)
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public Date getCreated_on() {
+		return created_on;
+	}
+	public void setCreated_on(Date created_on) {
+		this.created_on = created_on;
+	}
+	@Column(length = 35)
+	public String getCreated_by() {
+		return created_by;
+	}
+	public void setCreated_by(String created_by) {
+		this.created_by = created_by;
+	}
+	public Date getModified_on() {
+		return modified_on;
+	}
+	public void setModified_on(Date modified_on) {
+		this.modified_on = modified_on;
+	}
+	@Column(length = 35)
+	public String getModified_by() {
+		return modified_by;
+	}
+	public void setModified_by(String modified_by) {
+		this.modified_by = modified_by;
+	}	
+
+	/*private Set<Tb_Med_Opd_Sp_Subprocedure> sub_proc = new HashSet<Tb_Med_Opd_Sp_Subprocedure>(0);
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "procedure")
+	public Set<Tb_Med_Opd_Sp_Subprocedure> getSub_proc() {
+		return sub_proc;
+	}
+	public void setSub_proc(Set<Tb_Med_Opd_Sp_Subprocedure> sub_proc) {
+		this.sub_proc = sub_proc;
+	}*/
+	
+
+    private Tb_Med_Opd_Sp_Department department;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "dept_id", nullable = false)
+	public Tb_Med_Opd_Sp_Department getDepartment() {
+		return department;
+	}
+	public void setDepartment(Tb_Med_Opd_Sp_Department department) {
+		this.department = department;
+	}
+}

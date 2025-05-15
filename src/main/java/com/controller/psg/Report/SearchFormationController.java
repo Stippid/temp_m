@@ -1,0 +1,315 @@
+package com.controller.psg.Report;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.controller.orbat.AllMethodsControllerOrbat;
+import com.controller.psg.Master.Psg_CommonController;
+import com.controller.psg.Queries.Blood_Group_Controller;
+import com.controller.validation.ValidationController;
+import com.dao.login.RoleBaseMenuDAO;
+import com.dao.psg.Report.search_formation_wise_dataDao;
+import com.models.Tbl_CodesForm;
+@Controller
+@RequestMapping(value = { "admin", "/", "user" })
+public class SearchFormationController {
+	
+	Blood_Group_Controller bloodGP = new Blood_Group_Controller();
+	Psg_CommonController mcommon = new Psg_CommonController();
+	AllMethodsControllerOrbat m = new AllMethodsControllerOrbat();
+	
+	
+	@Autowired
+	search_formation_wise_dataDao cd;
+	
+
+	ValidationController valid = new ValidationController();
+	
+	@Autowired
+	private RoleBaseMenuDAO roledao;
+	
+	
+	
+	@RequestMapping(value = "/admin/SearchFormationOfficer_url", method = RequestMethod.GET)
+	public ModelAndView SearchFormationOfficer_url(ModelMap Mmap, HttpSession sessionA,
+			@RequestParam(value = "msg", required = false) String msg, HttpServletRequest request,
+			HttpSession sessionUserId)throws SQLException {
+		
+			String roleid = sessionUserId.getAttribute("roleid").toString();
+			Boolean val = roledao.ScreenRedirect("SearchFormationOfficer_url", roleid);
+			if (val == false) {
+				return new ModelAndView("AccessTiles");
+			}
+			if (request.getHeader("Referer") == null) {
+				msg = "";
+				return new ModelAndView("redirect:bodyParameterNotAllow");
+			}
+
+		
+		
+		String sus_no = sessionA.getAttribute("roleSusNo").toString();
+		String  roleSubAccess = sessionUserId.getAttribute("roleSubAccess").toString();
+		String  username = sessionUserId.getAttribute("username").toString();
+		String roleAccess = sessionA.getAttribute("roleAccess").toString();
+		String roleFormationNo = sessionA.getAttribute("roleFormationNo").toString();
+		
+		if(roleAccess.equals("Formation")) {
+			if(roleSubAccess.equals("Command")) {
+				String formation_code = String.valueOf(roleFormationNo.charAt(0));
+				List<Tbl_CodesForm> comd= bloodGP.getFormationList("Command",formation_code);	
+				Mmap.put("getCommandList",comd);
+				List<Tbl_CodesForm> corps=bloodGP.getFormationList("Corps",formation_code);
+				Mmap.put("getCorpsList",corps);
+				
+				String select="<option value='0'>--Select--</option>";
+				Mmap.put("selectcorps",select);
+				Mmap.put("selectDiv",select);
+				Mmap.put("selectBde",select);
+			}
+			if(roleSubAccess.equals("Corps")) {
+				String command = String.valueOf(roleFormationNo.charAt(0));
+				List<Tbl_CodesForm> comd=bloodGP.getFormationList("Command",command);
+				Mmap.put("getCommandList",comd);
+				
+				String cor = String.valueOf(roleFormationNo.charAt(0)) + String.valueOf(roleFormationNo.charAt(1)) +  String.valueOf(roleFormationNo.charAt(2));
+				List<Tbl_CodesForm> corps=bloodGP.getFormationList("Corps",cor);
+				Mmap.put("getCorpsList",corps);
+				
+				List<Tbl_CodesForm> Bn=bloodGP.getFormationList("Division",cor);
+				Mmap.put("getDivList",Bn);
+				
+				String select="<option value='0'>--Select--</option>";
+				Mmap.put("selectDiv",select);
+				Mmap.put("selectBde",select);
+			}
+			if(roleSubAccess.equals("Division")) {
+				String command = String.valueOf(roleFormationNo.charAt(0));
+				List<Tbl_CodesForm> comd=bloodGP.getFormationList("Command",command);
+				Mmap.put("getCommandList",comd);
+				
+				String cor = String.valueOf(roleFormationNo.charAt(0)) + String.valueOf(roleFormationNo.charAt(1)) +  String.valueOf(roleFormationNo.charAt(2));
+				List<Tbl_CodesForm> corps=bloodGP.getFormationList("Corps",cor);
+				Mmap.put("getCorpsList",corps);
+				
+				String div = String.valueOf(roleFormationNo.charAt(0)) + String.valueOf(roleFormationNo.charAt(1)) +  String.valueOf(roleFormationNo.charAt(2)) + String.valueOf(roleFormationNo.charAt(3)) +String.valueOf(roleFormationNo.charAt(4)) + String.valueOf(roleFormationNo.charAt(5));
+				List<Tbl_CodesForm> Bn=bloodGP.getFormationList("Division",div);
+				Mmap.put("getDivList",Bn);
+				
+				List<Tbl_CodesForm> bde=bloodGP.getFormationList("Brigade",div);
+				Mmap.put("getBdeList",bde);
+				
+				String select="<option value='0'>--Select--</option>";
+				Mmap.put("selectBde",select);
+			}
+			if(roleSubAccess.equals("Brigade")) {
+				String command = String.valueOf(roleFormationNo.charAt(0));
+				List<Tbl_CodesForm> comd=bloodGP.getFormationList("Command",command);
+				Mmap.put("getCommandList",comd);
+				
+				String cor = String.valueOf(roleFormationNo.charAt(0)) + String.valueOf(roleFormationNo.charAt(1)) +  String.valueOf(roleFormationNo.charAt(2));
+				List<Tbl_CodesForm> corps=bloodGP.getFormationList("Corps",cor);
+				Mmap.put("getCorpsList",corps);
+				
+				String div = String.valueOf(roleFormationNo.charAt(0)) + String.valueOf(roleFormationNo.charAt(1)) +  String.valueOf(roleFormationNo.charAt(2)) + String.valueOf(roleFormationNo.charAt(3)) +String.valueOf(roleFormationNo.charAt(4)) + String.valueOf(roleFormationNo.charAt(5));
+				List<Tbl_CodesForm> Bn=bloodGP.getFormationList("Division",div);
+				Mmap.put("getDivList",Bn);
+				
+				String bde_code = roleFormationNo;
+				List<Tbl_CodesForm> bde = bloodGP.getFormationList("Brigade",bde_code);
+				Mmap.put("getBdeList",bde);
+			}
+		}
+		 if(roleAccess.equals("Unit")){
+			 String roleSusNo = sessionA.getAttribute("roleSusNo").toString();
+				Mmap.put("sus_no",roleSusNo);
+				Mmap.put("unit_name",m.getActiveUnitNameFromSusNo_Without_Enc(roleSusNo,sessionA).get(0));
+				
+				List<String> formation =mcommon.getformationfromSus_NOList(roleSusNo);
+				roleFormationNo = formation.get(0);
+				
+				String command = String.valueOf(roleFormationNo.charAt(0));
+				List<Tbl_CodesForm> comd=bloodGP.getFormationList("Command",command);
+				Mmap.put("getCommandList",comd);
+				
+				String cor = String.valueOf(roleFormationNo.charAt(0)) + String.valueOf(roleFormationNo.charAt(1)) +  String.valueOf(roleFormationNo.charAt(2));
+				List<Tbl_CodesForm> corps=bloodGP.getFormationList("Corps",cor);
+				Mmap.put("getCorpsList",corps);
+				
+				String div = String.valueOf(roleFormationNo.charAt(0)) + String.valueOf(roleFormationNo.charAt(1)) +  String.valueOf(roleFormationNo.charAt(2)) + String.valueOf(roleFormationNo.charAt(3)) +String.valueOf(roleFormationNo.charAt(4)) + String.valueOf(roleFormationNo.charAt(5));
+				List<Tbl_CodesForm> Bn=bloodGP.getFormationList("Division",div);
+				Mmap.put("getDivList",Bn);
+				
+				String bde_code = roleFormationNo;
+				List<Tbl_CodesForm> bde = bloodGP.getFormationList("Brigade",bde_code);
+				Mmap.put("getBdeList",bde);
+				
+		 }
+		if(roleAccess.equals("MISO") || roleAccess.equals("HeadQuarter")) {
+			List<Tbl_CodesForm> comd=m.getCommandDetailsList();
+			Mmap.put("getCommandList",comd);
+			String selectComd ="<option value=''>--Select--</option>";
+			String select="<option value='0'>--Select--</option>";
+			Mmap.put("selectcomd", selectComd);
+			Mmap.put("selectcorps",select);
+			Mmap.put("selectDiv",select);
+			Mmap.put("selectBde",select);
+		}
+		Mmap.put("getTypeofRankList", mcommon.getTypeofRankList());
+		Mmap.put("msg", msg);
+		
+		
+
+		
+		return new ModelAndView("Search_formation_officer_tile");
+	
+	}
+
+	 
+	 @RequestMapping(value = "/admin/Searchformationbattle", method = RequestMethod.POST)
+		public ModelAndView Searchformationbattle(ModelMap Mmap,HttpSession session,
+				@RequestParam(value = "msg", required = false) String msg,
+				@RequestParam(value = "personnel_no1", required = false) String personnel_no,
+			
+				@RequestParam(value = "rank1", required = false) String rank,HttpServletRequest request) {
+		 
+		 
+		 String roleid = session.getAttribute("roleid").toString();
+			Boolean val = roledao.ScreenRedirect("SearchFormationOfficer_url", roleid);
+			if (val == false) {
+				return new ModelAndView("AccessTiles");
+			}
+			if (request.getHeader("Referer") == null) {
+				msg = "";
+				return new ModelAndView("redirect:bodyParameterNotAllow");
+			}
+
+				String roleType = session.getAttribute("roleType").toString();
+				String roleSusNo = session.getAttribute("roleSusNo").toString();
+				String roleAccess = session.getAttribute("roleAccess").toString();
+				
+				if(roleAccess.equals("Unit")){
+					Mmap.put("sus_no",roleSusNo);
+					Mmap.put("unit_name", m.getActiveUnitNameFromSusNo_Without_Enc(roleSusNo, session) .get(0));
+
+
+				}
+				/*	ArrayList<ArrayList<String>> list = bcd.Search_BattleCA(personnel_no, status, rank, roleSusNo, roleType);*/
+					
+			/*	Mmap.put("list", list);
+				Mmap.put("size", list.size());*/
+				Mmap.put("personnel_no1", personnel_no);
+				
+				Mmap.put("rank1", rank);
+			Mmap.put("getTypeofRankList", mcommon.getTypeofRankList());
+			    
+			return new ModelAndView("Search_formation_officer_tile");
+		}
+	 
+	 
+	 
+	 
+	 
+	 //////////////////////////////////	
+		@RequestMapping(value = "/getbattlecassformation", method = RequestMethod.POST)
+		public @ResponseBody List<Map<String, Object>> getbattlecassformation(int startPage,int pageLength,String Search,String orderColunm,String orderType,String personnel_no,String rank,HttpSession sessionUserId,
+				String cont_comd,String cont_corps,
+				String cont_div,String cont_bde,String unit_name,String sus_no) throws SQLException {
+			
+			String roleAccess = sessionUserId.getAttribute("roleAccess").toString();
+			String roleSubAccess = sessionUserId.getAttribute("roleSubAccess").toString();
+			String roleFormationNo = sessionUserId.getAttribute("roleFormationNo").toString();
+			
+			if(roleAccess.equals("Formation")) {
+				if(roleSubAccess.equals("Command")) {
+					String fcode_comd = String.valueOf(roleFormationNo.charAt(0));
+					cont_comd = fcode_comd;
+					
+					if(!cont_bde.equals("0") && !cont_bde.equals("")){
+						cont_bde = fcode_comd+cont_bde.substring(1, 10);
+			    	}else {
+			    		if(!cont_div.equals("0") && !cont_div.equals("")){
+			    			cont_div = fcode_comd+cont_div.substring(1, 6);
+				    	}else {
+				    		if(!cont_corps.equals("0") && !cont_corps.equals("")){
+				    			cont_corps = fcode_comd+cont_corps.substring(1, 3);
+				    		}else {
+					    		if(!cont_comd.equals("-1") && !cont_comd.equals("")){
+					    			cont_comd = fcode_comd;
+						    	}
+					    	}
+					    }
+				    }
+				}
+				if(roleSubAccess.equals("Corps")) {
+					String fcode_corps = String.valueOf(roleFormationNo.charAt(0)) + String.valueOf(roleFormationNo.charAt(1)) + String.valueOf(roleFormationNo.charAt(2));
+					cont_corps = fcode_corps;
+					
+					if(!cont_bde.equals("0") && !cont_bde.equals("")){
+						cont_bde = fcode_corps+cont_bde.substring(3, 10);
+			    	}else {
+			    		if(!cont_div.equals("0") && !cont_div.equals("")){
+			    			cont_div = fcode_corps+cont_div.substring(3, 6);
+				    	}else {
+				    		if(!cont_corps.equals("0") && !cont_corps.equals("")){
+				    			cont_corps = fcode_corps;
+					    	}else {
+					    		if(!cont_comd.equals("-1") && !cont_comd.equals("")){
+					    			cont_comd = fcode_corps;
+						    	}
+					    	}
+					    }
+				    }
+				}
+				if(roleSubAccess.equals("Division")) {
+					String fcode_div =  String.valueOf(roleFormationNo.charAt(0)) + String.valueOf(roleFormationNo.charAt(1)) + String.valueOf(roleFormationNo.charAt(2))+ String.valueOf(roleFormationNo.charAt(3)) + String.valueOf(roleFormationNo.charAt(4)) + String.valueOf(roleFormationNo.charAt(5));
+					cont_div = fcode_div;
+					
+					if(!cont_bde.equals("0") && !cont_bde.equals("")){
+						cont_bde = fcode_div+cont_bde.substring(6, 10);
+			    	}else {
+			    		if(!cont_div.equals("0") && !cont_div.equals("")){
+			    			cont_div = fcode_div;
+				    	}else {
+				    		if(!cont_corps.equals("0") && !cont_corps.equals("")){
+				    			cont_corps = fcode_div;
+					    	}else {
+					    		if(!cont_comd.equals("-1") && !cont_comd.equals("")){
+					    			cont_comd = fcode_div;
+						    	}
+					    	}
+					    }
+				    }
+				}
+				if(roleSubAccess.equals("Brigade")) {
+					cont_bde = roleFormationNo;
+				}
+			}
+			
+			return cd.getallformationbattlecass(startPage, pageLength, Search, orderColunm, orderType, personnel_no,rank,
+					 sessionUserId,cont_comd,cont_corps,cont_div,cont_bde,unit_name,sus_no);
+		}
+	 
+		@RequestMapping(value = "/getbattlecassformationCount", method = RequestMethod.POST)
+		public @ResponseBody long getbattlecassformationCount(String Search,String orderColunm,String orderType,String personnel_no,String rank,HttpSession sessionUserId,
+				String cont_comd,String cont_corps,
+				String cont_div,String cont_bde,String unit_name,String sus_no) throws SQLException {
+			
+		
+			return cd.getallformationbattlecassCountList(Search, orderColunm, orderType,personnel_no,rank,
+					 sessionUserId,cont_comd,cont_corps,cont_div,cont_bde,unit_name,sus_no);
+		}
+	 
+}

@@ -1,0 +1,73 @@
+package com.models;
+
+import static javax.persistence.GenerationType.IDENTITY;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+
+@Entity
+@Table(name = "cue_tb_wepe_link_sus_pers_footnotes", uniqueConstraints = {@UniqueConstraint(columnNames = "id")})
+public class CUE_TB_WEPE_link_sus_pers_footnotes {
+
+	private int id;
+	private String  sus_no;
+	private String we_pe_no;
+	
+	private String  created_by;
+	private String  created_on;
+	private String  status;
+	private int  foot_fk;
+	
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "id", unique = true, nullable = false)
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getSus_no() {
+		return sus_no;
+	}
+	public void setSus_no(String sus_no) {
+		this.sus_no = sus_no;
+	}
+	public String getWe_pe_no() {
+		return we_pe_no;
+	}
+	public void setWe_pe_no(String we_pe_no) {
+		this.we_pe_no = we_pe_no;
+	}
+	public String getCreated_by() {
+		return created_by;
+	}
+	public void setCreated_by(String created_by) {
+		this.created_by = created_by;
+	}
+	public String getCreated_on() {
+		return created_on;
+	}
+	public void setCreated_on(String created_on) {
+		this.created_on = created_on;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public int getFoot_fk() {
+		return foot_fk;
+	}
+	public void setFoot_fk(int foot_fk) {
+		this.foot_fk = foot_fk;
+	}
+	
+	
+}

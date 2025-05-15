@@ -1,0 +1,154 @@
+package com.dao.psg.Master;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.sql.DataSource;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import com.models.psg.Master.TB_DEGREE;
+import com.persistance.util.HibernateUtil;
+
+public class DegreeImpl implements DegreeDao {
+	
+	private DataSource dataSource;
+
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+
+	public ArrayList<ArrayList<String>> search_Degree(String degree,String status)
+	{
+		ArrayList<ArrayList<String>> alist = new ArrayList<ArrayList<String>>();
+		Connection conn = null;
+		String q="";
+		String qry="";
+		
+		try{	  
+			conn = dataSource.getConnection();			 
+			PreparedStatement stmt=null;
+			
+			if (!degree.equals("")) {
+				qry += " and upper(degree) like ?";
+			}	
+				
+			if (!status.equals("0") ) {
+				qry += " and  status = ?";
+			}
+			
+			q = "	SELECT id, degree, status FROM  tb_psg_mstr_degree  where id !=0 "  
+					+ qry;
+			
+			stmt = conn.prepareStatement(q);
+			int j = 1;
+			if (!degree.equals("")) {
+				stmt.setString(j, degree.toUpperCase()+"%");
+				j++;
+			}
+			
+			
+			if (!status.equals("0") ) {
+				stmt.setString(j, status);
+				j++;
+			}
+			
+				
+				ResultSet rs = stmt.executeQuery();   
+
+				while (rs.next()) {
+					ArrayList<String> list = new ArrayList<String>();
+					list.add(rs.getString("degree"));
+					
+					String f = "";
+					String f1 = "";
+					
+					String Update = "onclick=\"  if (confirm('Are You Sure You Want to Update This Degree?') ){editData("+ rs.getString("id") + ")}else{ return false;}\"";
+					f = "<i class='action_icons action_update'  " + Update + " title='Edit Data'></i>";
+					String Delete1 = "onclick=\"  if (confirm('Are You Sure You Want to Delete This Degree?') ){deleteData(" + rs.getString("id") + ")}else{ return false;}\"";
+					f1 = "<i class='action_icons action_delete' " + Delete1 + " title='Delete Data'></i>";
+		
+					if(status.equals("inactive"))
+					{
+						
+						list.add("");
+						list.add("");
+
+					}
+					else {
+					list.add(f);
+					list.add(f1);
+					}
+				alist.add(list);
+ 	        }
+		      rs.close();
+		      stmt.close();
+		      conn.close();
+		   }catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				if (conn != null) {
+					try {
+						conn.close();
+					} catch (SQLException e) {
+				  }
+				}
+			}
+		return alist;
+		}
+	
+	@SuppressWarnings("unused")
+	@Override
+	public TB_DEGREE getdegreeByid(int id) {
+		Session sessionHQL = HibernateUtil.getSessionFactory().openSession();
+	 	Transaction tx = sessionHQL.beginTransaction();
+	 	TB_DEGREE updateid = (TB_DEGREE) sessionHQL.get(TB_DEGREE.class, id);
+		sessionHQL.getTransaction().commit();
+		sessionHQL.close();		
+		return updateid;
+	}
+	public ArrayList<ArrayList<String>> search_DegreeReport()
+	{
+		ArrayList<ArrayList<String>> alist = new ArrayList<ArrayList<String>>();
+		Connection conn = null;
+		String q="";
+		
+		try{	  
+			conn = dataSource.getConnection();			 
+			PreparedStatement stmt=null;
+			
+			q = "	SELECT id, degree FROM  tb_psg_mstr_degree  where id !=0 " ; 
+			
+			stmt = conn.prepareStatement(q);
+				ResultSet rs = stmt.executeQuery();   
+				int i = 1;
+				while (rs.next()) {
+					ArrayList<String> list = new ArrayList<String>();
+					String id = String.valueOf(i++);
+					list.add(id);
+					list.add(rs.getString("degree"));
+					
+					alist.add(list);
+	 	        }
+		      rs.close();
+		      stmt.close();
+		      conn.close();
+		   }catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				if (conn != null) {
+					try {
+						conn.close();
+					} catch (SQLException e) {
+				  }
+				}
+			}
+		return alist;
+		}
+
+
+}

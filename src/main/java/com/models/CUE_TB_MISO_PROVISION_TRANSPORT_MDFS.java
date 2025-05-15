@@ -1,0 +1,110 @@
+package com.models;
+
+import static javax.persistence.GenerationType.IDENTITY;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+@Entity
+@Table(name = "cue_tb_miso_provision_transport_mdfs", uniqueConstraints = {@UniqueConstraint(columnNames = "id")})
+public class CUE_TB_MISO_PROVISION_TRANSPORT_MDFS {
+	
+	private int id;
+	private int provision_id;
+	private String  we_pe_no;
+	private String  modification;
+	private String  created_by;
+	private String  created_on;
+	private String  modified_by;
+	private String  modified_on;
+	private String  mct_no;
+	private String  no_of_units;
+	private String status;
+	private int amt_inc_dec;
+	
+
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "id", unique = true, nullable = false)
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getWe_pe_no() {
+		return we_pe_no;
+	}
+	public void setWe_pe_no(String we_pe_no) {
+		this.we_pe_no = we_pe_no;
+	}
+	public String getModification() {
+		return modification;
+	}
+	public void setModification(String modification) {
+		this.modification = modification;
+	}
+	
+	public String getCreated_by() {
+		return created_by;
+	}
+	public void setCreated_by(String created_by) {
+		this.created_by = created_by;
+	}
+	public String getCreated_on() {
+		return created_on;
+	}
+	public void setCreated_on(String created_on) {
+		this.created_on = created_on;
+	}
+	public String getModified_by() {
+		return modified_by;
+	}
+	public void setModified_by(String modified_by) {
+		this.modified_by = modified_by;
+	}
+	public String getModified_on() {
+		return modified_on;
+	}
+	public void setModified_on(String modified_on) {
+		this.modified_on = modified_on;
+	}
+		
+	
+	public int getProvision_id() {
+		return provision_id;
+	}
+	public void setProvision_id(int provision_id) {
+		this.provision_id = provision_id;
+	}
+	public String getNo_of_units() {
+		return no_of_units;
+	}
+	public void setNo_of_units(String no_of_units) {
+		this.no_of_units = no_of_units;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getMct_no() {
+		return mct_no;
+	}
+	public void setMct_no(String mct_no) {
+		this.mct_no = mct_no;
+	}
+	public int getAmt_inc_dec() {
+		return amt_inc_dec;
+	}
+	public void setAmt_inc_dec(int amt_inc_dec) {
+		this.amt_inc_dec = amt_inc_dec;
+	}
+	
+	
+
+}

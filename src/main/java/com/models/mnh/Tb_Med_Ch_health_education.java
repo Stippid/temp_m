@@ -1,0 +1,109 @@
+package com.models.mnh;
+
+import static javax.persistence.GenerationType.IDENTITY;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+@Entity
+@Table(name = "tb_med_ch_health_education", uniqueConstraints = { @UniqueConstraint(columnNames = "id") })
+public class Tb_Med_Ch_health_education {
+	
+	int id;
+	int p_id;
+	String topic;
+	String unit_name;	
+	String personal_category;
+	int number_present;
+	String photographs;
+	String remarks;
+
+	String created_by;
+	String modified_by;
+	Date created_date;
+	Date modified_date;
+	
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	@Column(name = "id", unique = true, nullable = false)
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getP_id() {
+		return p_id;
+	}
+	public void setP_id(int p_id) {
+		this.p_id = p_id;
+	}
+	public String getTopic() {
+		return topic;
+	}
+	public void setTopic(String topic) {
+		this.topic = topic;
+	}
+	public String getUnit_name() {
+		return unit_name;
+	}
+	public void setUnit_name(String unit_name) {
+		this.unit_name = unit_name;
+	}
+	public String getPersonal_category() {
+		return personal_category;
+	}
+	public void setPersonal_category(String personal_category) {
+		this.personal_category = personal_category;
+	}
+	public int getNumber_present() {
+		return number_present;
+	}
+	public void setNumber_present(int number_present) {
+		this.number_present = number_present;
+	}
+	public String getPhotographs() {
+		return photographs;
+	}
+	public void setPhotographs(String photographs) {
+		this.photographs = photographs;
+	}
+	public String getRemarks() {
+		return remarks;
+	}
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+	public String getCreated_by() {
+		return created_by;
+	}
+	public void setCreated_by(String created_by) {
+		this.created_by = created_by;
+	}
+	public String getModified_by() {
+		return modified_by;
+	}
+	public void setModified_by(String modified_by) {
+		this.modified_by = modified_by;
+	}
+	public Date getCreated_date() {
+		return created_date;
+	}
+	public void setCreated_date(Date created_date) {
+		this.created_date = created_date;
+	}
+	public Date getModified_date() {
+		return modified_date;
+	}
+	public void setModified_date(Date modified_date) {
+		this.modified_date = modified_date;
+	}
+	
+	
+}

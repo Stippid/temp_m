@@ -1,0 +1,339 @@
+package com.controller.psg.update_offr_data;
+import java.math.BigInteger;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.controller.psg.Master.Psg_CommonController;
+import com.controller.validation.ValidationController;
+import com.dao.psg.Transaction.CensusAprovedDAO;
+import com.dao.psg.update_census_data.SeniorityDAO;
+import com.models.psg.Transaction.TB_TRANS_PROPOSED_COMM_LETTER;
+import com.models.psg.update_census_data.TB_CHANGE_TNAI_NO;
+import com.models.psg.update_census_data.TB_CHANGE_TNAI_NO;
+import com.models.psg.update_census_data.TB_CHANGE_TNAI_NO;
+import com.models.psg.update_census_data.TB_CHANGE_TNAI_NO;
+import com.models.psg.update_census_data.TB_CHANGE_TNAI_NO;
+import com.persistance.util.HibernateUtil;
+
+@Controller
+@RequestMapping(value = { "admin", "/", "user" })
+public class Change_Of_TnaiNo_Controller {
+	
+	Psg_CommonController com = new Psg_CommonController();
+	ValidationController validation = new ValidationController();
+
+	@Autowired
+
+	CensusAprovedDAO censusAprovedDAO;
+	
+	
+	@Autowired
+	SeniorityDAO SD;
+	
+	
+	@RequestMapping(value = "/admin/Change_of_TnaiNo_action", method = RequestMethod.POST)
+	public @ResponseBody String Change_of_TnaiNo_action(ModelMap Mmap, HttpSession session,
+			HttpServletRequest request) throws ParseException {
+		DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+		Session sessionhql = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = sessionhql.beginTransaction();
+		Date date = new Date();
+		Date dt_authority = null;
+
+		String username = session.getAttribute("username").toString();
+		String authority = request.getParameter("tnai_authority");
+		Date comm_date = format.parse(request.getParameter("comm_date"));
+		Date change_in_name_dt = null;
+
+		String change_in_tnaino_date = request.getParameter("change_in_tnaino_date");
+
+		String date_of_authority = request.getParameter("tnai_date_of_authority");
+
+		String tnaino = request.getParameter("tnaino");
+		BigInteger comm_id = new BigInteger(request.getParameter("comm_id_tnai"));
+		String ch_r_id = request.getParameter("ch_tnai_id");
+		//int census_id = Integer.parseInt(request.getParameter("census_id"));
+		int census_id=0;
+		String censusIdParameter = request.getParameter("census_id_tnai");
+		if (censusIdParameter != null && !censusIdParameter.isEmpty()) {
+		    census_id = Integer.parseInt(censusIdParameter);		    
+		}
+		
+		String msg = "";
+		
+		
+
+		if (authority == null || authority.equals("")) {
+			return "Please Enter Authority ";
+		}
+		if (!validation.isValidAuth(authority)) {
+			return validation.isValidAuthMSG + " Authority";
+		}
+		if (!validation.isvalidLength(authority, validation.authorityMax, validation.authorityMin)) {
+			return "Authority " + validation.isValidLengthMSG;
+		}
+		if (date_of_authority == null || date_of_authority.equals("null") || date_of_authority.equals("DD/MM/YYYY")
+				|| date_of_authority.equals("")) {
+			return "Please Select Date of Authority";
+		}
+		if (!validation.isValidDate(date_of_authority)) {
+			return validation.isValidDateMSG + " of Authority";
+		}
+		if (!date_of_authority.equals("") && !date_of_authority.equals("DD/MM/YYYY")) {
+			dt_authority = format.parse(date_of_authority);
+		}
+		if (com.CompareDate(dt_authority, comm_date) == 0) {
+			return "Authority Date should be Greater than Commission Date";
+		}
+		if (tnaino == null || tnaino.equals("")) {
+			return "Please Enter TNAI No";
+		}
+	
+		
+		if (change_in_tnaino_date == null || change_in_tnaino_date.equals("null")
+				|| change_in_tnaino_date.equals("DD/MM/YYYY") || change_in_tnaino_date.equals("")) {
+			return "Please Select Date";
+		}
+		if (!change_in_tnaino_date.equals("") && !change_in_tnaino_date.equals("DD/MM/YYYY")) {
+			change_in_name_dt = format.parse(change_in_tnaino_date);
+		}
+
+		try {
+			
+//			 Query q0 = sessionhql.createQuery("select count(id) from TB_CHANGE_TNAI_NO where change_in_name_date=:change_in_name_date and comm_id=:comm_id and  id!=:id and status!=-1").setTimestamp("change_in_name_date", change_in_name_dt)
+//					 .setParameter("id", Integer.parseInt(ch_r_id)).setParameter("comm_id", comm_id);
+//				Long c = (Long) q0.uniqueResult();
+//				if(c>0) {
+//					return "Date Of Change In Tnai No Already Exists";
+//				}
+
+
+			if (Integer.parseInt(ch_r_id) == 0) {
+				TB_CHANGE_TNAI_NO n = new TB_CHANGE_TNAI_NO();
+				n.setCreated_by(username);
+				n.setCreated_date(date);
+				n.setAuthority(authority);
+				n.setTnai_no(tnaino);
+				n.setDate_of_authority(dt_authority);
+				n.setComm_id(comm_id);
+				n.setCensus_id(census_id);
+				n.setStatus(0);
+				n.setCreated_by(username);
+				n.setCreated_date(date);
+				n.setChange_in_name_date(change_in_name_dt);						
+			
+				int id = (int) sessionhql.save(n);
+				msg = Integer.toString(id);
+			}else {
+				String hql = "update TB_CHANGE_TNAI_NO set authority=:authority,date_of_authority=:date_of_authority,tnai_no=:tnai_no,"
+						+ "change_in_name_date=:change_in_name_date,modified_by=:modified_by,modified_date=:modified_date,status=:status  "
+						+ " where  id=:id";
+				Query query = sessionhql.createQuery(hql).setString("authority", authority)
+						.setDate("date_of_authority", dt_authority).setString("tnai_no", tnaino)
+						.setDate("change_in_name_date", change_in_name_dt)
+						.setInteger("id", Integer.parseInt(ch_r_id)).setString("modified_by", username)
+						.setTimestamp("modified_date", new Date()).setInteger("status", 0);
+
+				msg = query.executeUpdate() > 0 ? "update" : "0";
+			}			
+			com.update_offr_status(census_id,username);
+			tx.commit();
+		} catch (RuntimeException e) {
+			try {
+				tx.rollback();
+				msg = "0";
+			} catch (RuntimeException rbe) {
+				msg = "0";
+			}
+		} finally {
+			if (sessionhql != null) {
+				sessionhql.close();
+			}
+		}
+
+		return msg;
+	}
+	
+	
+	@RequestMapping(value = "/admin/getChangeOfTnaiNoData", method = RequestMethod.POST)
+	public @ResponseBody List<TB_CHANGE_TNAI_NO> getChangeOfTnaiNoData(ModelMap Mmap, HttpSession session,
+			HttpServletRequest request) throws ParseException {
+		Session sessionHQL = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = sessionHQL.beginTransaction();		
+		BigInteger comm_id =new BigInteger(request.getParameter("comm_id"));
+		String hqlUpdate = " from TB_CHANGE_TNAI_NO where status = '0' and comm_id=:comm_id ";
+		Query query = sessionHQL.createQuery(hqlUpdate).setBigInteger("comm_id", comm_id);
+		@SuppressWarnings("unchecked")
+		List<TB_CHANGE_TNAI_NO> list = (List<TB_CHANGE_TNAI_NO>) query.list();
+		tx.commit();
+		sessionHQL.close();
+		return list;
+	}
+	
+	
+	public @ResponseBody List<TB_CHANGE_TNAI_NO> getChangeOfTnaiNodtl(int id, BigInteger comm_id) {
+		Session sessionHQL = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = sessionHQL.beginTransaction();
+		String hqlUpdate = " from TB_CHANGE_TNAI_NO where census_id=:census_id and status = '0' and comm_id=:comm_id ";
+		Query query = sessionHQL.createQuery(hqlUpdate).setInteger("census_id", id).setBigInteger("comm_id", comm_id);
+		@SuppressWarnings("unchecked")
+		List<TB_CHANGE_TNAI_NO> list = (List<TB_CHANGE_TNAI_NO>) query.list();
+		tx.commit();
+		sessionHQL.close();
+		return list;
+	}
+	
+    /*--------------------- For REJECT ----------------------------------*/
+	
+    @RequestMapping(value = "/admin/GetTnaiNo_Reject", method = RequestMethod.POST)
+    public @ResponseBody String GetTnaiNo_Reject(ModelMap Mmap, HttpSession session,HttpServletRequest request,
+    		@RequestParam(value = "msg", required = false) String msg) throws ParseException {
+ 	   
+    	     String username = session.getAttribute("username").toString();
+    	     TB_CHANGE_TNAI_NO DE = new TB_CHANGE_TNAI_NO();
+
+    	     DE.setCensus_id(Integer.parseInt(request.getParameter("ch_id")));
+    	     DE.setComm_id(new BigInteger(request.getParameter("comm_id")));
+    	     DE.setId(Integer.parseInt(request.getParameter("ch_tnai_id")));
+    	     DE.setReject_remarks(request.getParameter("reject_remarks"));
+    			String msg1 =TnaiNo_Reject(DE, username);
+    			
+    		  return msg1;
+          
+    }
+    public String TnaiNo_Reject(TB_CHANGE_TNAI_NO obj,String username){
+    	
+    	  Session sessionHQL = HibernateUtil.getSessionFactory().openSession();
+    	  Transaction tx = sessionHQL.beginTransaction();
+
+    		  String msg = "";
+    		  String msg1= "";
+    		  try{
+//    			   
+    			      String hql = "update TB_CHANGE_TNAI_NO set approved_by=:approved_by,approved_date=:approved_date,status=:status,reject_remarks=:reject_remarks  "
+    						+ " where census_id=:census_id and comm_id=:comm_id and status = '0' and id=:id ";
+    			  
+    				  Query query = sessionHQL.createQuery(hql).setString("approved_by", username).setTimestamp("approved_date", new Date())
+    						  .setString("reject_remarks", obj.getReject_remarks())
+    						.setInteger("status", 3).setInteger("census_id", obj.getCensus_id()).setBigInteger("comm_id",obj.getComm_id())
+    						.setInteger("id", obj.getId());
+    			
+    				   msg = query.executeUpdate() > 0 ? "1" :"0";
+    		          
+    		         
+    		          tx.commit();
+    		  
+    		  }catch (Exception e) {
+    		          msg = "Data Not Rejected.";
+    		          tx.rollback();
+    		  }
+    		  finally {
+    		          sessionHQL.close();
+    		  }
+    		  return msg;
+
+    	}
+    
+    
+    
+    public String Update_Change_of_TnaiNo(TB_CHANGE_TNAI_NO obj, String username) {
+
+		Session sessionHQL = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = sessionHQL.beginTransaction();
+
+		String msg = "";
+		String msg1 = "";
+		try {
+
+			String hql1 = "update TB_CHANGE_TNAI_NO set status=:status where  comm_id=:comm_id and (status != '0' and status != '-1') ";
+
+			Query query1 = sessionHQL.createQuery(hql1).setInteger("status", 2)
+					.setBigInteger("comm_id", obj.getComm_id());
+
+			msg = query1.executeUpdate() > 0 ? "Data Approve Successfully." : "Data Not Approve Successfully.";
+
+			String hql = "update TB_CHANGE_TNAI_NO set modified_by=:modified_by,modified_date=:modified_date,approved_by=:approved_by,approved_date=:approved_date, "
+					+ "status=:status  "
+					+ " where census_id=:census_id and comm_id=:comm_id and status = '0'";
+
+			Query query = sessionHQL.createQuery(hql).setString("modified_by", username)
+					.setTimestamp("modified_date", obj.getModified_date()).setString("approved_by", username)
+					.setTimestamp("approved_date", obj.getApproved_date()).setInteger("status", 1)
+					.setInteger("census_id", obj.getCensus_id()).setBigInteger("comm_id", obj.getComm_id());
+
+			msg = query.executeUpdate() > 0 ? "Data Approve Successfully." : "Data Not Approve Successfully.";
+
+			tx.commit();
+
+		} catch (Exception e) {
+			msg = "Data Not Approve Successfully.";
+			tx.rollback();
+		} finally {
+			sessionHQL.close();
+		}
+		return msg;
+
+	}
+    
+    public String Update_Comm_TnaiNo(TB_TRANS_PROPOSED_COMM_LETTER obj, String username) {
+
+		Session sessionHQL = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = sessionHQL.beginTransaction();
+
+		String msg = "";
+
+		try {
+
+			String hql = "update TB_TRANS_PROPOSED_COMM_LETTER set modified_by=:modified_by,modified_date=:modified_date,tnai_no=:tnai_no  "
+					+ " where id=:comm_id ";
+
+			Query query = sessionHQL.createQuery(hql).setString("modified_by", username)
+					.setTimestamp("modified_date", obj.getModified_date()).setBigInteger("comm_id", obj.getId())
+					.setString("tnai_no", obj.getTnai_no());
+
+			msg = query.executeUpdate() > 0 ? "Data Updated Successfully." : "Data Not Updated.";
+
+			tx.commit();
+
+		} catch (Exception e) {
+			msg = "Data Not Updated.";
+			tx.rollback();
+		} finally {
+			sessionHQL.close();
+		}
+		return msg;
+
+	}
+    
+	public @ResponseBody List<TB_CHANGE_TNAI_NO> getChangeOfTnaiNoData(int id, BigInteger comm_id) {
+		Session sessionHQL = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = sessionHQL.beginTransaction();
+		String hqlUpdate = " from TB_CHANGE_TNAI_NO where census_id=:census_id and status = '3' and comm_id=:comm_id ";
+		Query query = sessionHQL.createQuery(hqlUpdate).setInteger("census_id", id).setBigInteger("comm_id", comm_id);
+		@SuppressWarnings("unchecked")
+		List<TB_CHANGE_TNAI_NO> list = (List<TB_CHANGE_TNAI_NO>) query.list();
+		tx.commit();
+		sessionHQL.close();
+		return list;
+	}
+	
+
+}

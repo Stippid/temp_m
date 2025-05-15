@@ -1,0 +1,721 @@
+package com.dao.orbat;
+
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.sql.DataSource;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
+import com.controller.notification.NotificationController;
+import com.github.dandelion.core.utils.StringUtils;
+import com.github.dandelion.datatables.core.ajax.ColumnDef;
+import com.github.dandelion.datatables.core.ajax.DataSet;
+import com.github.dandelion.datatables.core.ajax.DatatablesCriterias;
+import com.models.Miso_Orbat_Unt_Dtl;
+import com.models.TB_LDAP_MODULE_MASTER;
+import com.persistance.util.HibernateUtil;
+
+public class DisbandmentDAOImpl implements DisbandmentDAO {
+	private DataSource dataSource;
+
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+	
+	NotificationController notification = new NotificationController();
+	
+	////////////////////////report rising dis/////////////////////////////
+	
+	public DataSet<Map<String, Object>> findraisingdisbadmentWithDatatablesCriterias(DatatablesCriterias criterias, String status_sus_no,String roleType,String scenario,String unit_name,String comm_depart_date,String compltn_arrv_date) {
+		
+		Date to_date1 = Calendar.getInstance().getTime();  			 
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");  
+        String to_date = dateFormat.format(to_date1);
+        
+       
+        
+        Date to_date12 = null;
+        Date comm_depart_date1 = null;
+        Date compltn_arrv_date1 = null;
+        
+        String qryWithoutActiveFromTo = "";
+        String qryWithActiveFromTo = "";
+    	if(status_sus_no.equals("Active")){
+    		if(comm_depart_date  != "" && compltn_arrv_date == ""){
+    			qryWithActiveFromTo +=" and approved_rejected_on between :comm_depart_date  and :to_date ";
+	    		try {
+		        	comm_depart_date1 = dateFormat.parse(comm_depart_date);
+					to_date12 = dateFormat.parse(to_date);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				} 
+	    	}
+	    	if(comm_depart_date  == "" && compltn_arrv_date  != ""){
+	    		qryWithActiveFromTo +=" and approved_rejected_on =:compltn_arrv_date ";
+	    		try {
+	    			compltn_arrv_date1 = dateFormat.parse(compltn_arrv_date);
+	    		} catch (ParseException e) {
+	    			e.printStackTrace();
+	    		} 
+	    	}
+	    	if(comm_depart_date  != "" && compltn_arrv_date  != ""){
+	    		qryWithActiveFromTo +=" and approved_rejected_on between :comm_depart_date and :compltn_arrv_date ";
+	    		
+	    		try {
+	    			compltn_arrv_date1 = dateFormat.parse(compltn_arrv_date);
+	    			comm_depart_date1 = dateFormat.parse(comm_depart_date);
+	    		} catch (ParseException e) {
+	    			e.printStackTrace();
+	    		} 
+	    	}
+    	}else {
+    		if(comm_depart_date  != "" && compltn_arrv_date == ""){
+    			qryWithoutActiveFromTo +=" and creation_on between :comm_depart_date  and :to_date ";
+	    		try {
+		        	comm_depart_date1 = dateFormat.parse(comm_depart_date);
+					to_date12 = dateFormat.parse(to_date);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				} 
+	    	}
+	    	if(comm_depart_date  == "" && compltn_arrv_date  != ""){
+	    		qryWithoutActiveFromTo +=" and creation_on =:compltn_arrv_date ";
+	    		try {
+	    			compltn_arrv_date1 = dateFormat.parse(compltn_arrv_date);
+	    		} catch (ParseException e) {
+	    			e.printStackTrace();
+	    		} 
+	    	}
+	    	if(comm_depart_date  != "" && compltn_arrv_date  != ""){
+	    		qryWithoutActiveFromTo +=" and creation_on between :comm_depart_date and :compltn_arrv_date ";
+	    		
+	    		try {
+	    			compltn_arrv_date1 = dateFormat.parse(compltn_arrv_date);
+	    			comm_depart_date1 = dateFormat.parse(comm_depart_date);
+	    		} catch (ParseException e) {
+	    			e.printStackTrace();
+	    		} 
+	    	}
+    	}
+        
+		
+		String qry =" where  sus_no in (select sus_no from Tbl_CodesForm) ";
+    	if(scenario != null && !scenario.equals("")){
+			qry +=" and id in ( select letter_id from Miso_Orbat_Shdul_Detl where type_of_letter =:type_of_letter  "+qryWithActiveFromTo +") ";
+    	}
+    	if(status_sus_no  != null && !status_sus_no.equals("")){
+			qry +=" and status_sus_no =:status_sus_no ";
+    	}
+    	if(unit_name  != null && !unit_name.equals("")){
+			qry +=" and unit_name =:unit_name ";
+    	}
+    	System.out.println("jdjd:- " + qry);
+    	qry +=qryWithoutActiveFromTo;
+    	
+    	
+    	List<Map<String, Object>> metadata = findDepartmentCriteriasdis(criterias,qry,status_sus_no,roleType,scenario,unit_name,comm_depart_date,compltn_arrv_date,to_date12,comm_depart_date1,compltn_arrv_date1);
+		Long countFiltered = getFilteredCountrdis(criterias,qry,status_sus_no,roleType,scenario,unit_name,comm_depart_date,compltn_arrv_date,to_date12,comm_depart_date1,compltn_arrv_date1);
+		Long count = getTotalCountrdis(qry,status_sus_no,roleType,scenario,unit_name,comm_depart_date,compltn_arrv_date,to_date12,comm_depart_date1,compltn_arrv_date1);
+		return new DataSet<Map<String, Object>>(metadata, count, countFiltered);
+	}
+	@SuppressWarnings("unchecked")
+	private List<Map<String, Object>> findDepartmentCriteriasdis(DatatablesCriterias criterias, String qry ,String status_sus_no,String roleType,String scenario,String unit_name,String comm_depart_date,String compltn_arrv_date,Date to_date12, Date comm_depart_date1,Date compltn_arrv_date1) {
+		
+		StringBuilder queryBuilder = null;
+	    queryBuilder = new StringBuilder("SELECT d.id,d.sus_no,d.unit_name FROM Miso_Orbat_Unt_Dtl d "+ qry);
+	    queryBuilder.append(getFilterQueryrdis(criterias , queryBuilder));
+	    if (criterias.hasOneSortedColumn()) {
+
+			List<String> orderParams = new ArrayList<String>();
+			queryBuilder.append(" ORDER BY ");
+			for (ColumnDef columnDef : criterias.getSortingColumnDefs()) {
+				if (columnDef.getName().contains("id")) {
+					orderParams.add("id "+ columnDef.getSortDirection());
+				} else {
+					orderParams.add(columnDef.getName() + " " + columnDef.getSortDirection());
+				}
+			}
+			Iterator<String> itr2 = orderParams.iterator();
+			while (itr2.hasNext()) {
+				queryBuilder.append(itr2.next());
+				if (itr2.hasNext()) {
+					queryBuilder.append(" , ");
+				}
+			}
+		}
+		Session session= HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		Query q = session.createQuery(queryBuilder.toString());
+		
+		if(scenario != null && !scenario.equals("")){
+			q.setParameter("type_of_letter", scenario);
+		}
+    	if(status_sus_no  != null && !status_sus_no.equals("")){
+			q.setParameter("status_sus_no", status_sus_no);
+    	}
+    	if(unit_name  != null && !unit_name.equals("")){
+			q.setParameter("unit_name", unit_name);
+    	}
+    	if(comm_depart_date  != "" && compltn_arrv_date == ""){
+    		q.setDate("comm_depart_date", comm_depart_date1);
+    		q.setDate("to_date", to_date12);
+    	}
+    	if(comm_depart_date  == "" && compltn_arrv_date  != ""){
+    		q.setDate("compltn_arrv_date", compltn_arrv_date1);
+    	}
+    	if(comm_depart_date  != "" && compltn_arrv_date  != ""){
+    		q.setDate("comm_depart_date", comm_depart_date1);
+    		q.setDate("compltn_arrv_date", compltn_arrv_date1);
+    	}
+		
+		
+		q.setFirstResult(criterias.getDisplayStart());
+		q.setMaxResults(criterias.getDisplaySize());
+		List<Object[]>  list = (List<Object[]> ) q.list();
+		tx.commit();
+		session.close();
+		
+		List<Map<String, Object>> l1 = new ArrayList<Map<String, Object>>();
+		for(Object[] listObject: list){
+			Map<String, Object> columns = new LinkedHashMap<String, Object>();	
+			columns.put("id", listObject[0]);
+			columns.put("sus_no", listObject[1]);
+			columns.put("unit_name", listObject[2]);
+			
+			String modify = "onclick=\"  if (confirm('Are You Sure you want to Modify Unit?') ){ modifyDetails('"+listObject[0]+"')}else{ return false;}\"";
+	  		String mod ="<i class='action_icons action_update' "+modify+" title='Modify Unit'></i>";
+			
+	  		String reject = "onclick=\"  if (confirm('Are You Sure you want to Reject Unit?') ){ rejectDetails('"+listObject[0]+"')}else{ return false;}\"";
+	  		String rej ="<i class='action_icons action_reject' "+reject+" title='Reject Unit'></i>";
+	  		
+	  		String Approved = "onclick=\"  if (confirm('Are You Sure you want to Approved Unit Details?') ){approvedDetails('"+listObject[0]+"')}else{ return false;}\"";
+	  		String app ="<i class='action_icons action_approve' "+Approved+" title='Approve Unit Details'></i>";
+			
+	  		String delete1 = "onclick=\"  if (confirm('Are You Sure you want to Delete Unit?') ){ deleteDetails('"+listObject[0]+"','"+listObject[1]+"')}else{ return false;}\"";
+	  		String del ="<i class='action_icons action_delete' "+delete1+" title='Delete Unit'></i>";
+			
+	  		String view1 = "onclick=\" view('"+listObject[0]+"') \"";
+	  		String view ="<i class='action_icons action_view' "+view1+" title='View Unit Details'></i>";
+			
+	  		String f="";
+	      	if(status_sus_no.equals("Pending")){
+	      		if(roleType.equals("ALL")){
+		      		f += mod;  
+		      		f += rej;  
+		      		f += app;  
+		      		f += del;  
+		      		f += view;  
+	      		}
+	      		if(roleType.equals("APP")){
+	      		//	f += rej;  
+		      		f += app;
+		      		f += view;  
+		    	}
+	      		if(roleType.equals("DEO")) {
+	      			f += mod; 
+	      			f += del;  
+		      		f += view;
+				}
+	      		if(roleType.equals("VIEW")) {
+	      			f += view;
+				}
+		  	}
+	      	if(status_sus_no.equals("Active") || status_sus_no.equals("Inactive")){
+				f += view;
+			}
+	      	
+	  		if(status_sus_no.equals("Reject")){
+	  			if(roleType.equals("DEO") || roleType.equals("ALL")) {
+					f += del;
+					f += mod;
+					f += view;
+				}
+	  			if(roleType.equals("APP")){
+					f += view;
+				}
+	  			if(roleType.equals("VIEW")) {
+	      			f += view;
+				}
+		  	}
+			
+	  		columns.put("action", f);
+			l1.add(columns);
+		}
+		return l1;
+	}
+
+	private static StringBuilder getFilterQueryrdis(DatatablesCriterias criterias,StringBuilder queryBuilder1) {
+		StringBuilder queryBuilder = new StringBuilder();
+		List<String> paramList = new ArrayList<String>();
+
+		if (StringUtils.isNotBlank(criterias.getSearch()) && criterias.hasOneFilterableColumn()) {
+			if(!queryBuilder1.toString().contains("where")){
+				queryBuilder.append(" WHERE ");
+			}
+			else{
+				queryBuilder.append(" AND (");
+			}
+			for (ColumnDef columnDef : criterias.getColumnDefs()) {
+				if (columnDef.isFilterable() && StringUtils.isBlank(columnDef.getSearch())) {
+					if(columnDef.getName().equalsIgnoreCase("id"))
+					{
+						if(criterias.getSearch().matches("[0-9]+"))
+						{
+							paramList.add(" d." + columnDef.getName()	+ " = '?'".replace("?", criterias.getSearch().toLowerCase()));
+						}
+					}
+					else{
+						if(!columnDef.getName().equals("action")) {
+							paramList.add(" LOWER(d." + columnDef.getName()	+ ") LIKE '%?%'".replace("?", criterias.getSearch().toLowerCase()));
+						}
+					}
+				}
+			}
+			Iterator<String> itr = paramList.iterator();
+			while (itr.hasNext()) {
+				queryBuilder.append(itr.next());
+				if (itr.hasNext()) {
+					queryBuilder.append(" OR ");
+				}
+			}
+			queryBuilder.append(")");
+		}
+		return queryBuilder;
+	}
+	
+	private Long getTotalCountrdis(String qry,String status_sus_no,String roleType,String scenario,String unit_name,String comm_depart_date,String compltn_arrv_date,Date to_date12, Date comm_depart_date1,Date compltn_arrv_date1) {
+		Session session= HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		Query q = null;
+		q = session.createQuery("SELECT COUNT(d) FROM Miso_Orbat_Unt_Dtl d  "+ qry );
+		
+		if(scenario != null && !scenario.equals("")){
+			q.setParameter("type_of_letter", scenario);
+		}
+    	if(status_sus_no  != null && !status_sus_no.equals("")){
+			q.setParameter("status_sus_no", status_sus_no);
+    	}
+    	if(unit_name  != null && !unit_name.equals("")){
+			q.setParameter("unit_name", unit_name);
+    	}
+    	if(comm_depart_date  != "" && compltn_arrv_date == ""){
+    		q.setDate("comm_depart_date", comm_depart_date1);
+    		q.setDate("to_date", to_date12);
+    	}
+    	if(comm_depart_date  == "" && compltn_arrv_date  != ""){
+    		q.setDate("compltn_arrv_date", compltn_arrv_date1);
+    	}
+    	if(comm_depart_date  != "" && compltn_arrv_date  != ""){
+    		q.setDate("comm_depart_date", comm_depart_date1);
+    		q.setDate("compltn_arrv_date", compltn_arrv_date1);
+    	}
+    	
+		Long count = (Long) q.list().get(0);
+		tx.commit();
+		session.close();
+		return count;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Long getFilteredCountrdis(DatatablesCriterias criterias,String qry ,String status_sus_no,String roleType,String scenario,String unit_name,String comm_depart_date,String compltn_arrv_date,Date to_date12, Date comm_depart_date1,Date compltn_arrv_date1) {
+		StringBuilder queryBuilder = null;
+		queryBuilder = new StringBuilder("SELECT d FROM Miso_Orbat_Unt_Dtl d  "+ qry);
+		queryBuilder.append(getFilterQueryrdis(criterias,queryBuilder));
+		Session session= HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		Query q = session.createQuery(queryBuilder.toString());
+		
+		if(scenario != null && !scenario.equals("")){
+			q.setParameter("type_of_letter", scenario);
+		}
+    	if(status_sus_no  != null && !status_sus_no.equals("")){
+			q.setParameter("status_sus_no", status_sus_no);
+    	}
+    	if(unit_name  != null && !unit_name.equals("")){
+			q.setParameter("unit_name", unit_name);
+    	}
+    	if(comm_depart_date  != "" && compltn_arrv_date == ""){
+    		q.setDate("comm_depart_date", comm_depart_date1);
+    		q.setDate("to_date", to_date12);
+    	}
+    	if(comm_depart_date  == "" && compltn_arrv_date  != ""){
+    		q.setDate("compltn_arrv_date", compltn_arrv_date1);
+    	}
+    	if(comm_depart_date  != "" && compltn_arrv_date  != ""){
+    		q.setDate("comm_depart_date", comm_depart_date1);
+    		q.setDate("compltn_arrv_date", compltn_arrv_date1);
+    	}
+    	
+		List<Miso_Orbat_Unt_Dtl> list = (List<Miso_Orbat_Unt_Dtl>) q.list();
+		tx.commit();
+		session.close();
+		return Long.parseLong(String.valueOf(list.size()));
+
+	}			
+	
+	
+	public String rejectSearchDisbandmentDetails(int rid,String username,String date){
+		// Status Update of Rejected Sus No
+		Session sessionUpdate = HibernateUtil.getSessionFactory().openSession();
+		Transaction tx = sessionUpdate.beginTransaction();
+		String hqlUpdate = "update Miso_Orbat_Unt_Dtl c set c.status_sus_no = :status_sus_no where c.id = :id";
+		int uid = sessionUpdate.createQuery( hqlUpdate ).setString( "status_sus_no", "Reject" ).setInteger("id", rid).executeUpdate();
+		tx.commit();
+		sessionUpdate.close();
+		
+		if(uid > 0) {
+			return "Data Rejected Successfully";
+		}else {
+			return "Data not Rejected";
+		}
+	}
+	
+	public String deletedSearchDisbandmentDetails(int did,String scenarioD,String sus_noD){
+		
+		Session sessionHQL = null;
+    	Transaction tx = null;
+    	try{
+    		sessionHQL = HibernateUtil.getSessionFactory().openSession();
+    		tx = sessionHQL.beginTransaction();	
+    		
+    		String hqlDeleteUnt = "delete from Miso_Orbat_Unt_Dtl c where c.id = :id";
+    		int uid = sessionHQL.createQuery( hqlDeleteUnt ).setInteger("id", did).executeUpdate();
+    		sessionHQL.flush();
+			sessionHQL.clear();
+		
+			if(uid > 0) {
+				String hqlDeleteShul = "delete from Miso_Orbat_Shdul_Detl c where c.letter_id =:letter_id";
+				sessionHQL.createQuery( hqlDeleteShul ).setInteger("letter_id", did).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				if(scenarioD.equals("New Raising") || scenarioD.equals("Re-Structuring")) {
+					
+					String hqlDeleteSusDtl = "delete from Tb_Miso_Orbat_Sus_Dtl c where c.sus_no =:sus_no";
+					sessionHQL.createQuery( hqlDeleteSusDtl ).setString("sus_no", sus_noD).executeUpdate();
+					sessionHQL.flush();
+					sessionHQL.clear();
+					
+					String hqlDeleteCodeForm = "delete from Tbl_CodesForm c where c.sus_no =:sus_no";
+					sessionHQL.createQuery( hqlDeleteCodeForm ).setString("sus_no", sus_noD).executeUpdate();
+					sessionHQL.flush();
+					sessionHQL.clear();
+				}
+			}
+			tx.commit();
+			return "Data Deleted Successfully";
+    	}catch(RuntimeException e){
+    		try{
+    			tx.rollback();
+    			return "Data not Deleted";
+    		}catch(RuntimeException rbe){
+    			return "Data not Deleted";
+    		}
+    	}finally{
+    		if(sessionHQL!=null){
+    			sessionHQL.close();
+    		}
+    	}
+			
+	}
+	
+	
+	public List<String> approvedSearchDisbandmentDetails(int rid,String username,String date){
+		List<String> a_msg=new ArrayList<String>();
+		Session sessionHQL = null;
+    	Transaction tx = null;
+    	try{
+    		sessionHQL = HibernateUtil.getSessionFactory().openSession();
+    		tx = sessionHQL.beginTransaction();	
+		
+			Query q1 = sessionHQL.createQuery("select type_of_letter from Miso_Orbat_Shdul_Detl where letter_id=:letter_id");
+			q1.setParameter("letter_id", rid);
+			String type_of_letter = (String) q1.list().get(0);
+			sessionHQL.flush();
+			sessionHQL.clear();
+			
+			
+			Miso_Orbat_Unt_Dtl unt_dtl = (Miso_Orbat_Unt_Dtl) sessionHQL.get(Miso_Orbat_Unt_Dtl.class, rid);
+			sessionHQL.flush();
+			sessionHQL.clear();
+			
+			int uid = 0;
+			
+			if(type_of_letter.equals("0")) {
+				uid = Integer.parseInt(approved(date,username,rid));
+			}
+			if(type_of_letter.equals("1")) {
+				
+				String Unit_dtl_Invalid = "update Miso_Orbat_Unt_Dtl c set status_sus_no = :status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where c.sus_no=:sus_no_for_comb_disint and status_sus_no ='Active'";
+				uid = sessionHQL.createQuery( Unit_dtl_Invalid).setString( "status_sus_no", "INVALID" ).setString("is_unit_pending", "N").setString("old_unit_status", "Active").setString("sus_no_for_comb_disint", unt_dtl.getSus_no_for_comb_disint()).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				if(uid > 0) {
+					approved(date,username,rid);
+				}
+			}
+			if(type_of_letter.equals("2")) {
+				
+				String Unit_dtl_Invalid = "update Miso_Orbat_Unt_Dtl c set status_sus_no = :status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where c.sus_no =:sus_no and status_sus_no ='Inactive'";
+				uid = sessionHQL.createQuery( Unit_dtl_Invalid).setString( "status_sus_no", "INVALID" ).setString("is_unit_pending", "N").setString("old_unit_status", "Inactive").setString("sus_no", unt_dtl.getSus_no()).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				
+				String Unit_dtl_inactive = "update Miso_Orbat_Unt_Dtl c set status_sus_no = :status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where c.sus_no =:sus_no_for_comb_disint and status_sus_no ='Active'";
+				uid = sessionHQL.createQuery( Unit_dtl_inactive).setString( "status_sus_no", "Inactive" ).setString("is_unit_pending", "N").setString("old_unit_status", "Active").setString("sus_no_for_comb_disint", unt_dtl.getSus_no_for_comb_disint()).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				if(uid > 0) {
+					approved(date,username,rid);
+				}
+			}
+			if(type_of_letter.equals("3")) {
+				/*
+				String Unit_dtl_Invalid = "update Miso_Orbat_Unt_Dtl c set status_sus_no = :status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where c.sus_no =:sus_no and status_sus_no ='Inactive'";
+				uid = sessionHQL.createQuery( Unit_dtl_Invalid).setString( "status_sus_no", "INVALID" ).setString("is_unit_pending", "N").setString("old_unit_status", "Inactive").setString("sus_no", unt_dtl.getSus_no()).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				
+				String Unit_dtl_inactive = "update Miso_Orbat_Unt_Dtl c set status_sus_no = :status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where c.sus_no =:sus_no_for_comb_disint and status_sus_no ='Active'";
+				uid = sessionHQL.createQuery( Unit_dtl_inactive).setString( "status_sus_no", "Inactive" ).setString("is_unit_pending", "N").setString("old_unit_status", "Active").setString("sus_no_for_comb_disint", unt_dtl.getSus_no_for_comb_disint()).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				if(uid > 0) {
+					approved(date,username,rid);
+				}*/
+			}
+			if(type_of_letter.equals("4")) {
+				
+				String Unit_dtl_Invalid = "update Miso_Orbat_Unt_Dtl c set status_sus_no = :status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where c.sus_no = :sus_no_for_comb_disint and status_sus_no ='Active'";
+				uid = sessionHQL.createQuery( Unit_dtl_Invalid).setString( "status_sus_no", "INVALID" ).setString("is_unit_pending", "N").setString("old_unit_status", "Active").setString("sus_no_for_comb_disint", unt_dtl.getSus_no_for_comb_disint()).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				if(uid > 0) {
+					String Unit_dtl_Active = "update Miso_Orbat_Unt_Dtl c set status_sus_no = :status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where c.id = :id";
+					sessionHQL.createQuery( Unit_dtl_Active ).setString( "status_sus_no", "Inactive" ).setString("is_unit_pending", "N").setString("old_unit_status", "Inactive").setInteger("id", rid).executeUpdate();
+					sessionHQL.flush();
+					sessionHQL.clear();
+					
+					String Shdul_Detl = "update Miso_Orbat_Shdul_Detl c set approved_rejected_by = :approved_rejected_by , approved_rejected_on=:approved_rejected_on , status=:status where c.letter_id = :letter_id";
+					sessionHQL.createQuery( Shdul_Detl ).setString( "approved_rejected_by", username ).setDate("approved_rejected_on", new Date()).setString("status", "1").setInteger("letter_id", rid).executeUpdate();
+					sessionHQL.flush();
+					sessionHQL.clear();
+				}
+			}
+			if(type_of_letter.equals("5") ) {
+				String Unit_dtl_Invalid = "update Miso_Orbat_Unt_Dtl c set status_sus_no = :status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where c.sus_no =:sus_no and status_sus_no ='Inactive'";
+				uid = sessionHQL.createQuery( Unit_dtl_Invalid).setString( "status_sus_no", "INVALID" ).setString("is_unit_pending", "N").setString("old_unit_status", "Inactive").setString("sus_no", unt_dtl.getSus_no()).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				if(uid > 0) {
+					approved(date,username,rid);
+				}
+			}
+			if( type_of_letter.equals("6") ||  type_of_letter.equals("7") || type_of_letter.equals("8")) {
+				String Unit_dtl_Invalid = "update Miso_Orbat_Unt_Dtl c set status_sus_no =:status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where sus_no =:sus_no and status_sus_no ='Active'";
+				uid = sessionHQL.createQuery( Unit_dtl_Invalid).setString( "status_sus_no", "INVALID" ).setString("is_unit_pending", "N").setString("old_unit_status", "Active").setString("old_unit_status", "Active").setString("sus_no", unt_dtl.getSus_no()).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				if(uid > 0) {
+					approved(date,username,rid);
+				}
+			}
+			if( type_of_letter.equals("9")) {
+				sessionHQL.createQuery("UPDATE Miso_Orbat_Relief_Prgm set miso_status='1' ,miso_approved_by=:miso_approved_by, miso_approved_on=:miso_approved_on  where sus_no=:sus_no and sd_status='1' and unit_status='1' and (miso_status != '1' or miso_status is null)").setParameter("miso_approved_by",username).setParameter("miso_approved_on",date).setString("sus_no", unt_dtl.getSus_no()).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				String Unit_dtl_Invalid = "update Miso_Orbat_Unt_Dtl c set status_sus_no =:status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where sus_no =:sus_no and status_sus_no ='Active'";
+				uid = sessionHQL.createQuery( Unit_dtl_Invalid).setString( "status_sus_no", "INVALID" ).setString("is_unit_pending", "N").setString("old_unit_status", "Active").setString("old_unit_status", "Active").setString("sus_no", unt_dtl.getSus_no()).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				if(uid > 0) {
+					approved(date,username,rid);
+				}
+				
+//				String user_id = "";
+//		 		int list = get_Moduleid_cue();
+//		    		List<String> list1 =getUserIdForNotification(list);
+//		    		for(int i=0;i<list1.size();i++) {
+//		    			user_id+=list1.get(i);
+//		    			if(i<list1.size()-1)
+//		    				user_id+=",";
+//		    		}
+//		    		
+//		    		if (user_id!="" && !user_id.equals(null) && !user_id.equals("")) {
+//		    			 String title = "Main Body Move" ;
+//		    			 String description = ""+unt_dtl.getSus_no()+" Location has been changed" ;
+//		    			 Boolean d = notification.sendNotification_tms(title, description,user_id, username,0);
+//		    			 }
+		    		
+				
+				
+				
+			}
+			if(type_of_letter.equals("10")) {
+				String Unit_dtl_Invalid = "update Miso_Orbat_Unt_Dtl c set status_sus_no =:status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where sus_no =:sus_no and status_sus_no ='Active'";
+				uid = sessionHQL.createQuery( Unit_dtl_Invalid).setString( "status_sus_no", "INVALID" ).setString("is_unit_pending", "N").setString("old_unit_status", "Active").setString("sus_no", unt_dtl.getSus_no()).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				if(uid > 0) {
+					approved(date,username,rid);
+				}
+			}
+			if(type_of_letter.equals("11")) {
+				String Unit_dtl_Invalid = "update Miso_Orbat_Unt_Dtl c set status_sus_no = :status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where c.sus_no = :sus_no_for_comb_disint and status_sus_no ='Active'";
+				uid = sessionHQL.createQuery( Unit_dtl_Invalid).setString( "status_sus_no", "Inactive" ).setString("is_unit_pending", "N").setString("old_unit_status", "Active").setString("sus_no_for_comb_disint", unt_dtl.getSus_no_for_comb_disint()).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				if(uid > 0) {
+					approved(date,username,rid);
+				}
+			}
+			if(type_of_letter.equals("12")) {
+				String Unit_dtl_Invalid = "update Miso_Orbat_Unt_Dtl c set status_sus_no = :status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where sus_no =:sus_no and status_sus_no ='Active'";
+				uid = sessionHQL.createQuery( Unit_dtl_Invalid).setString( "status_sus_no", "INVALID" ).setString("is_unit_pending", "N").setString("old_unit_status", "Active").setString("sus_no", unt_dtl.getSus_no()).executeUpdate();
+				sessionHQL.flush();
+				sessionHQL.clear();
+				
+				if(uid > 0) {
+					approved(date,username,rid);
+				}
+			}
+			
+			tx.commit();
+			a_msg.add("Data Approved Successfully");
+			a_msg.add(unt_dtl.getSus_no());
+			return a_msg;
+    	}catch(RuntimeException e){
+    		try{
+    			tx.rollback();
+    			 a_msg.add("Data not Approved");
+    			return a_msg;
+    		}catch(RuntimeException rbe){
+    			
+    			 a_msg.add("Data not Approved");
+     			return a_msg;
+    		}
+    	}finally{
+    		if(sessionHQL!=null){
+    			sessionHQL.close();
+    		}
+    	}
+	}
+
+public List<String> getUserIdForNotification(Integer module_id){
+		
+		List<String> list = new ArrayList<String>();
+		Connection conn = null;
+		String qry="";
+		try{	  
+			
+			conn = dataSource.getConnection();			 
+			PreparedStatement stmt=null;
+			qry +="Select user_id from public.userroleinformation where role_id in \r\n"
+					+ "(select distinct roleid from tb_ldap_rolemaster where moduleid = ?  and roleid in \r\n"
+					+ " (select role_id from public.roleinformation where role_type='ALL'))";
+			
+			stmt=conn.prepareStatement(qry);
+			stmt.setInt(1, module_id);
+			
+			ResultSet rs = stmt.executeQuery();  
+			  while (rs.next()) {
+				  list.add(rs.getString("user_id"));
+			  }
+		
+	      rs.close();
+	      stmt.close();
+	      conn.close();
+	   }catch (SQLException e) {
+			//throw new RuntimeException(e);
+		   System.out.println(e);
+			e.printStackTrace();
+		} finally {
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) {
+			  }
+			}		
+		return list;
+	}
+	}
+	
+	
+	public int get_Moduleid_cue()
+	{
+	Session sessionhql = HibernateUtil.getSessionFactory().openSession();
+	Transaction tx = sessionhql.beginTransaction();
+	String hql1 = "   from TB_LDAP_MODULE_MASTER where module_name=:module_name";
+	Query query1 = sessionhql.createQuery(hql1);
+	query1.setParameter("module_name","UNIT ENTITLEMENT");
+	List <TB_LDAP_MODULE_MASTER>list6 = query1.list();
+
+	int id=0;
+	if(!list6.isEmpty())
+	{
+	id=list6.get(0).getId();
+	}
+
+	return   id;
+	}
+	
+	public String approved(String date,String username,int rid){
+		Session sessionHQL = null;
+    	Transaction tx = null;
+    	try{
+    		sessionHQL = HibernateUtil.getSessionFactory().openSession();
+    		tx = sessionHQL.beginTransaction();	
+			String Unit_dtl_Active = "update Miso_Orbat_Unt_Dtl c set status_sus_no = :status_sus_no , is_unit_pending=:is_unit_pending ,old_unit_status=:old_unit_status where c.id = :id";
+			sessionHQL.createQuery( Unit_dtl_Active ).setString( "status_sus_no", "Active" ).setString("is_unit_pending", "N").setString("old_unit_status", "Active").setInteger("id", rid).executeUpdate();
+			sessionHQL.flush();
+			sessionHQL.clear();
+						
+			String Shdul_Detl = "update Miso_Orbat_Shdul_Detl c set approved_rejected_by = :approved_rejected_by , approved_rejected_on=:approved_rejected_on , status=:status where c.letter_id =:letter_id";
+			int uid = sessionHQL.createQuery( Shdul_Detl ).setString( "approved_rejected_by", username ).setDate("approved_rejected_on", new Date()).setString("status", "1").setInteger("letter_id", rid).executeUpdate();
+			sessionHQL.flush();
+			sessionHQL.clear();
+			
+			tx.commit();
+			return "1";
+    	}catch(RuntimeException e){
+    		try{
+    			tx.rollback();
+    			return "0";
+    		}catch(RuntimeException rbe){
+    			return "0";
+    		}
+    	}finally{
+    		if(sessionHQL!=null){
+    			sessionHQL.close();
+    		}
+    	}	
+	}
+}

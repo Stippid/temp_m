@@ -8,7 +8,7 @@
 	
 	 	    <!-- <property name="url" value="jdbc:postgresql://131.3.54.129:5432/misodb29nov24" />  -->
 		    <!--  <property name="url" value="jdbc:postgresql://localhost:5433/miso10march" />   -->
-		<property name="url" value="jdbc:postgresql://192.168.15.126:5434/MISO" />  
+		<property name="url" value="jdbc:postgresql://192.168.15.126:5434/miso" />  
 		<property name="username" value="postgres" />
 		<property name="password" value="Bisag@321" />
 	</bean>
@@ -48,7 +48,7 @@
 	<bean id="dataSourceOLAP" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.postgresql.Driver" />
 		
-  <property name="url" value="jdbc:postgresql://192.168.15.126:5434/MISO_OLAP" />  
+  <property name="url" value="jdbc:postgresql://192.168.15.126:5434/miso" />  
 
 		<property name="username" value="postgres" />
 		<property name="password" value="Bisag@321" />

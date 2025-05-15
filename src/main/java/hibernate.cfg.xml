@@ -11,7 +11,7 @@
   <property name="connection.driver_class">org.postgresql.Driver</property>
 
    <!-- <property name="connection.url">jdbc:postgresql://131.3.54.129:5432/misodb29nov24</property>  -->  
-  <property name="connection.url">jdbc:postgresql://192.168.15.126:5434/MISO</property> 
+  <property name="connection.url">jdbc:postgresql://192.168.15.126:5434/miso</property> 
    <!-- server path -->
        
   <property name="connection.username">postgres</property>

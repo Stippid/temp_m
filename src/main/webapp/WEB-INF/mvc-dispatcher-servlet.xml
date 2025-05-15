@@ -93,7 +93,7 @@
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName"
 			value="org.postgresql.Driver" />
-		  <property name="url" value="jdbc:postgresql://192.168.15.126:5434/MISO_OLAP" />   
+		  <property name="url" value="jdbc:postgresql://192.168.15.126:5434/miso" />   
 			  
 			 <!-- <property name="url" value="jdbc:postgresql://131.3.54.129:5432/miso_psg_olap" /> -->  
 			
@@ -120,7 +120,7 @@
      <!-- <property name="url"
 			value="jdbc:postgresql://131.3.54.129:5432/misodb29nov24"/>  -->
 			
-			   <property name="url" value="jdbc:postgresql://192.168.15.126:5434/MISO" /> 
+			   <property name="url" value="jdbc:postgresql://192.168.15.126:5434/miso" /> 
 			
 		<property name="username" value="postgres" />
 		<property name="password" value="Bisag@321" />
@@ -133,7 +133,7 @@
 			value="org.postgresql.Driver" />
 
 	      <property name="url"
-			value="jdbc:postgresql://192.168.15.126:5434/MISO_OLAP"/>    
+			value="jdbc:postgresql://192.168.15.126:5434/miso"/>    
 		 	<!-- <property name="url"
 			value="jdbc:postgresql://131.3.54.129:5435/miso_psg_olap"/>  -->
 		<property name="username" value="postgres" />
